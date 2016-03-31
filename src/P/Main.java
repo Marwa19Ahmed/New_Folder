@@ -1,6 +1,7 @@
 package P;
 
 import javafx.application.Application;
+import javafx.beans.binding.DoubleBinding;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -8,43 +9,44 @@ import javafx.scene.control.Label;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
 
-
 public class Main extends Application 
 {
-	Label lblanswer;
-	Button btn_add, btn_sub, btn_div, btn_mul, btn_clear,
-		   btn_dot, btn_openBra, btn_closeBra, btn_square,
-   		   btn_sqrt, btn_delete, btn_equal, btn_mod,
-   		   btn_1, btn_2, btn_3, btn_4, btn_5, btn_6,
-   		   btn_7, btn_8, btn_9, btn_0, btn_lg, btn_log;
-    
+	private GridPane container;
+	private Label lbl_answer;
+	private Button btn_add, btn_sub, btn_div, btn_mul, btn_clear,
+		    btn_dot, btn_openBra, btn_closeBra, btn_square,
+   		    btn_sqrt, btn_delete, btn_exqual,
+   		    btn_1, btn_2, btn_3, btn_4, btn_5, btn_6,
+   		    btn_7, btn_8, btn_9, btn_0, btn_lg, btn_log;
+	
     @Override
     public void start(Stage primaryStage)
-    {
+    {            
        InitiateComponents(); 	 
        ResizeComponents();
        SetStyles();
+       AddComponents();
+       EventHandler();
        
-       GridPane root = new GridPane();
-       root.setAlignment(Pos.TOP_LEFT);
-       root.setHgap(5);
-       root.setVgap(5);
-       AddComponents(root);
+       Scene scene = new Scene(container, 350, 550);
        
-       Scene scene = new Scene(root, 335, 280);
-       primaryStage.setTitle("Cal");
+       primaryStage.fullScreenExitHintProperty().set("");
+       primaryStage.setFullScreen(true);
+       primaryStage.centerOnScreen();
+       primaryStage.setTitle("3MG Calculator");
        primaryStage.setScene(scene);
        primaryStage.show();
        
-          	
     }
    
-    public static void main(String[] args) {
+    public static void main(String[] args) 
+    {
         launch(args);
     }
     
     private void InitiateComponents()
     {
+    	container = new GridPane();
     	btn_add = new Button("+");
     	btn_sub = new Button("-");
     	btn_div = new Button("/");
@@ -53,11 +55,10 @@ public class Main extends Application
     	btn_dot = new Button(".");
     	btn_openBra = new Button("(");
     	btn_closeBra = new Button(")");
-    	btn_square = new Button("X^2");
+    	btn_square = new Button("^2");
     	btn_sqrt = new Button("S");
     	btn_delete = new Button("<-");
-    	btn_equal = new Button("=");
-    	btn_mod = new Button("%");
+    	btn_exqual = new Button("=");
     	btn_1 = new Button("1");
     	btn_2 = new Button("2");
     	btn_3 = new Button("3");
@@ -70,128 +71,270 @@ public class Main extends Application
     	btn_0 = new Button("0");
     	btn_log = new Button("log");
     	btn_lg = new Button("lg");
-    	lblanswer = new Label();
+    	lbl_answer = new Label();
     }
    
     private void ResizeComponents()
     {
-    	lblanswer.setPrefWidth(325);
-        lblanswer.setPrefHeight(50);
+    	lbl_answer.prefWidthProperty().bind(container.widthProperty().subtract(15));
+        lbl_answer.prefHeightProperty().bind(container.heightProperty().divide(2));
         
-        btn_add.setPrefWidth(50);
-     	btn_sub.setPrefWidth(50);
-     	btn_div.setPrefWidth(50);
-     	btn_mul.setPrefWidth(50);
-     	btn_clear.setPrefWidth(50);
-     	btn_dot.setPrefWidth(50);
-     	btn_openBra.setPrefWidth(50);
-     	btn_closeBra.setPrefWidth(50);
-     	btn_square.setPrefWidth(50);
-     	btn_sqrt.setPrefWidth(50);
-     	btn_delete.setPrefWidth(50);
-     	btn_equal.setPrefWidth(50);
-     	btn_mod.setPrefWidth(50);
-     	btn_1.setPrefWidth(50);
-     	btn_2.setPrefWidth(50);
-     	btn_3.setPrefWidth(50);
-     	btn_4.setPrefWidth(50);
-     	btn_5.setPrefWidth(50);
-     	btn_6.setPrefWidth(50);
-     	btn_7.setPrefWidth(50);
-     	btn_8.setPrefWidth(50);
-     	btn_9.setPrefWidth(50);
-     	btn_0.setPrefWidth(50);
-     	btn_lg.setPrefWidth(50);
-     	btn_log.setPrefWidth(50);
+        DoubleBinding btn_width = container.widthProperty().divide(3);
+        DoubleBinding btn_height = container.heightProperty().subtract(35).divide(9);
+        
+        //reset width to all button on changing in container's width
+        btn_add.prefWidthProperty().bind(btn_width);
+     	btn_sub.prefWidthProperty().bind(btn_width);
+     	btn_div.prefWidthProperty().bind(btn_width);
+     	btn_mul.prefWidthProperty().bind(btn_width);
+     	btn_clear.prefWidthProperty().bind(btn_width);
+     	btn_dot.prefWidthProperty().bind(btn_width);
+     	btn_openBra.prefWidthProperty().bind(btn_width);
+     	btn_closeBra.prefWidthProperty().bind(btn_width);
+     	btn_square.prefWidthProperty().bind(btn_width);
+     	btn_sqrt.prefWidthProperty().bind(btn_width);
+     	btn_delete.prefWidthProperty().bind(btn_width);
+     	btn_exqual.prefWidthProperty().bind(btn_width);
      	
-     	btn_add.setPrefHeight(50);
-     	btn_sub.setPrefHeight(50);
-     	btn_div.setPrefHeight(50);
-     	btn_mul.setPrefHeight(50);
-     	btn_clear.setPrefHeight(50);
-     	btn_dot.setPrefHeight(50);
-     	btn_openBra.setPrefHeight(50);
-     	btn_closeBra.setPrefHeight(50);
-     	btn_square.setPrefHeight(50);
-     	btn_sqrt.setPrefHeight(50);
-     	btn_delete.setPrefHeight(50);
-     	btn_equal.setPrefHeight(50);
-     	btn_mod.setPrefHeight(50);
-     	btn_1.setPrefHeight(50);
-     	btn_2.setPrefHeight(50);
-     	btn_3.setPrefHeight(50);
-     	btn_4.setPrefHeight(50);
-     	btn_5.setPrefHeight(50);
-     	btn_6.setPrefHeight(50);
-     	btn_7.setPrefHeight(50);
-     	btn_8.setPrefHeight(50);
-     	btn_9.setPrefHeight(50);
-     	btn_0.setPrefHeight(50);
-     	btn_log.setPrefHeight(50);
-     	btn_lg.setPrefHeight(50);
+     	btn_1.prefWidthProperty().bind(btn_width);
+     	btn_2.prefWidthProperty().bind(btn_width);
+     	btn_3.prefWidthProperty().bind(btn_width);
+     	btn_4.prefWidthProperty().bind(btn_width);
+     	btn_5.prefWidthProperty().bind(btn_width);
+     	btn_6.prefWidthProperty().bind(btn_width);
+     	btn_7.prefWidthProperty().bind(btn_width);
+     	btn_8.prefWidthProperty().bind(btn_width);
+     	btn_9.prefWidthProperty().bind(btn_width);
+     	btn_0.prefWidthProperty().bind(btn_width);
+     	btn_lg.prefWidthProperty().bind(btn_width);
+     	btn_log.prefWidthProperty().bind(btn_width);
+     	
+     	//reset height to all button on changing in container's height
+     	btn_add.prefHeightProperty().bind(btn_height);
+     	btn_sub.prefHeightProperty().bind(btn_height);
+     	btn_div.prefHeightProperty().bind(btn_height);
+     	btn_mul.prefHeightProperty().bind(btn_height);
+     	btn_clear.prefHeightProperty().bind(btn_height);
+     	btn_dot.prefHeightProperty().bind(btn_height);
+     	btn_openBra.prefHeightProperty().bind(btn_height);
+     	btn_closeBra.prefHeightProperty().bind(btn_height);
+     	btn_square.prefHeightProperty().bind(btn_height);
+     	btn_sqrt.prefHeightProperty().bind(btn_height);
+     	btn_delete.prefHeightProperty().bind(btn_height);
+     	btn_exqual.prefHeightProperty().bind(btn_height);
+     	
+     	btn_1.prefHeightProperty().bind(btn_height);
+     	btn_2.prefHeightProperty().bind(btn_height);
+     	btn_3.prefHeightProperty().bind(btn_height);
+     	btn_4.prefHeightProperty().bind(btn_height);
+     	btn_5.prefHeightProperty().bind(btn_height);
+     	btn_6.prefHeightProperty().bind(btn_height);
+     	btn_7.prefHeightProperty().bind(btn_height);
+     	btn_8.prefHeightProperty().bind(btn_height);
+     	btn_9.prefHeightProperty().bind(btn_height);
+     	btn_0.prefHeightProperty().bind(btn_height);
+     	btn_log.prefHeightProperty().bind(btn_height);
+     	btn_lg.prefHeightProperty().bind(btn_height);
     }
     
-    private void AddComponents(GridPane root)
+    private void AddComponents()
     {  	    
-         root.add(lblanswer,1,1,6,2);
+         container.add(lbl_answer,1,1,6,2);
          
-         root.add(btn_7,1,3);
-         root.add(btn_8,2,3);
-         root.add(btn_9,3,3);
-         root.add(btn_add,4,3);
-         root.add(btn_openBra,5,3);
-         root.add(btn_closeBra,6,3);
+         //Add column 1
+         container.add(btn_openBra,1,4);
+         container.add(btn_sqrt,1,5);
+         container.add(btn_7,1,6);
+         container.add(btn_4,1,7);
+         container.add(btn_1,1,8);
+         container.add(btn_0,1,9);
+
+         //Add column 2
+         container.add(btn_closeBra,2,4);
+         container.add(btn_square,2,5); 
+         container.add(btn_8,2,6);
+         container.add(btn_5,2,7);
+         container.add(btn_2,2,8);
+         container.add(btn_dot,2,9);
+
+         //Add column 3
+         container.add(btn_clear,3,4);
+         container.add(btn_lg,3,5);
+         container.add(btn_9,3,6);
+         container.add(btn_6,3,7);
+         container.add(btn_3,3,8);
+         container.add(btn_exqual,3,9);
          
-         root.add(btn_4,1,4);
-         root.add(btn_5,2,4);
-         root.add(btn_6,3,4);
-         root.add(btn_sub,4,4);
-         root.add(btn_sqrt,5,4);
-         root.add(btn_square,6,4);
+         //Add column 4
+         container.add(btn_delete,4,4);
+         container.add(btn_log,4,5);
+         container.add(btn_add,4,6);
+         container.add(btn_sub,4,7);
+         container.add(btn_mul,4,8);
+         container.add(btn_div,4,9);
          
-         root.add(btn_1,1,5);
-         root.add(btn_2,2,5);
-         root.add(btn_3,3,5);
-         root.add(btn_mul,4,5);
-         root.add(btn_clear,5,5);
-         root.add(btn_delete,6,5);
-         
-         root.add(btn_0,1,6);
-         root.add(btn_dot,2,6);
-         root.add(btn_equal,3,6);
-         root.add(btn_div,4,6);
-         root.add(btn_log,5,6);
-         root.add(btn_lg,6,6);
     }
     
     private void SetStyles()
     {
-    	lblanswer.setStyle("-fx-border-radius: 10; -fx-background-radius: 10;"+
-    			"-fx-background-color: #ffffff; -fx-border-color: #00ffff;");
-    	btn_add.setStyle("-fx-background-radius: 30;");
-     	btn_sub.setStyle("-fx-background-radius: 30;");
-     	btn_div.setStyle("-fx-background-radius: 30;");
-     	btn_mul.setStyle("-fx-background-radius: 30;");
-     	btn_clear.setStyle("-fx-background-radius: 30;");
-     	btn_dot.setStyle("-fx-background-radius: 30;");
-     	btn_openBra.setStyle("-fx-background-radius: 30;");
-     	btn_closeBra.setStyle("-fx-background-radius: 30;");
-     	btn_square.setStyle("-fx-background-radius: 30;");
-     	btn_sqrt.setStyle("-fx-background-radius: 30;");
-     	btn_delete.setStyle("-fx-background-radius: 30;");
-     	btn_equal.setStyle("-fx-background-radius: 30;");
-     	btn_mod.setStyle("-fx-background-radius: 30;");
-     	btn_1.setStyle("-fx-background-radius: 30;");
-     	btn_2.setStyle("-fx-background-radius: 30;");
-     	btn_3.setStyle("-fx-background-radius: 30;");
-     	btn_4.setStyle("-fx-background-radius: 30;");
-     	btn_5.setStyle("-fx-background-radius: 30;");
-     	btn_6.setStyle("-fx-background-radius: 30;");
-     	btn_7.setStyle("-fx-background-radius: 30;");
-     	btn_8.setStyle("-fx-background-radius: 30;");
-     	btn_9.setStyle("-fx-background-radius: 30;");
-     	btn_0.setStyle("-fx-background-radius: 30;");
-     	btn_log.setStyle("-fx-background-radius: 30;");
-     	btn_lg.setStyle("-fx-background-radius: 30;");
+        container.setHgap(5);
+        container.setVgap(5);
+        container.setAlignment(Pos.CENTER);
+    	container.setStyle("-fx-base: rgb(46, 46, 46);");
+    	
+    	lbl_answer.setStyle("-fx-border-radius: 0; " +
+			    		   "-fx-background-radius: 0;"+
+			    		   "-fx-background-color: rgb(30, 30, 30);"+
+			    		   "-fx-border-color: rgb(150, 30, 30);"+
+			    		   "-fx-font: 28pt Serif;");
+    	
+    	String style_to_all_button = "-fx-background-radius: "+
+    			"0;-fx-base: rgb(46, 46, 46); -fx-font: 18pt Serif;";
+    	
+    	btn_exqual.setStyle("-fx-background-radius: 0; -fx-base: #C0392b");
+    	btn_add.setStyle(style_to_all_button);
+     	btn_sub.setStyle(style_to_all_button);
+     	btn_div.setStyle(style_to_all_button);
+     	btn_mul.setStyle(style_to_all_button);
+     	
+     	btn_clear.setStyle(style_to_all_button);
+     	btn_openBra.setStyle(style_to_all_button);
+     	btn_closeBra.setStyle(style_to_all_button);
+     	btn_square.setStyle(style_to_all_button);
+     	btn_sqrt.setStyle(style_to_all_button);
+     	btn_delete.setStyle(style_to_all_button);
+     	btn_log.setStyle(style_to_all_button);
+     	btn_lg.setStyle(style_to_all_button);
+     	
+     	btn_dot.setStyle(style_to_all_button);
+     	btn_1.setStyle(style_to_all_button);
+     	btn_2.setStyle(style_to_all_button);
+     	btn_3.setStyle(style_to_all_button);
+     	btn_4.setStyle(style_to_all_button);
+     	btn_5.setStyle(style_to_all_button);
+     	btn_6.setStyle(style_to_all_button);
+     	btn_7.setStyle(style_to_all_button);
+     	btn_8.setStyle(style_to_all_button);
+     	btn_9.setStyle(style_to_all_button);
+     	btn_0.setStyle(style_to_all_button);
     }
-}
+    
+    private void EventHandler()
+    {
+       	lbl_answer.setText(" ");
+       	
+       	//check the lbl_answer if it is valid or not before writing 
+        btn_0.setOnAction(e->{chk(lbl_answer.getText(),"0");});
+	   	btn_1.setOnAction(e->{chk(lbl_answer.getText(),"1");});
+	   	btn_2.setOnAction(e->{chk(lbl_answer.getText(),"2");});
+	   	btn_3.setOnAction(e->{chk(lbl_answer.getText(),"3");});
+	   	btn_4.setOnAction(e->{chk(lbl_answer.getText(),"4");});
+	   	btn_5.setOnAction(e->{chk(lbl_answer.getText(),"5");});
+	   	btn_6.setOnAction(e->{chk(lbl_answer.getText(),"6");});
+	   	btn_7.setOnAction(e->{chk(lbl_answer.getText(),"7");});
+	   	btn_8.setOnAction(e->{chk(lbl_answer.getText(),"8");});
+	   	btn_9.setOnAction(e->{chk(lbl_answer.getText(),"9");});
+	   	btn_dot.setOnAction(e->{chk(lbl_answer.getText(),".");});
+	   	
+	   	btn_add.setOnAction(e->{chk(lbl_answer.getText()," + ");});
+    	btn_sub.setOnAction(e->{chk(lbl_answer.getText()," - ");});
+    	btn_div.setOnAction(e->{chk(lbl_answer.getText()," / ");});
+    	btn_mul.setOnAction(e->{chk(lbl_answer.getText()," * ");});
+    	
+    	btn_openBra.setOnAction(e->{chk(lbl_answer.getText()," ( ");});
+    	btn_closeBra.setOnAction(e->{chk(lbl_answer.getText()," ) ");});
+    	btn_square.setOnAction(e->{chk(lbl_answer.getText(),"^2 ");});
+    	btn_sqrt.setOnAction(e->{chk(lbl_answer.getText()," sqrt");});
+    	btn_log.setOnAction(e->{chk(lbl_answer.getText()," log");});
+    	btn_lg.setOnAction(e->{chk(lbl_answer.getText()," log");});
+    	
+    	btn_clear.setOnAction(e->{chk(lbl_answer.getText(),"Clear");});
+    	btn_delete.setOnAction(e->{Delete(lbl_answer.getText());});
+    	btn_exqual.setOnAction(e->{Calculate(lbl_answer.getText());});
+    }
+    
+    private void chk(String exp,String op_num)
+    {
+    	//reset style to label if the size of string is bigger than label's width
+    	String lbl_answer_style = "-fx-border-radius: 0; " +
+	    		   "-fx-background-radius: 0;"+
+	    		   "-fx-background-color: rgb(30, 30, 30);"+
+	    		   "-fx-border-color: rgb(150, 30, 30);";
+    		    	
+    	//check the font 
+	    	boolean b = false;
+    		if(lbl_answer.getFont().getSize()-9<=10 && 
+    				exp.length()*lbl_answer.getFont().getSize()/2>lbl_answer.getWidth())
+    			b = true;
+    	
+    	//check for clear word or error word or error calculation
+    	boolean enter = false;
+		if( exp.startsWith(" Error") || b==true || op_num=="Clear" || op_num=="Error" || op_num=="Equal")
+		{
+			if(op_num=="Error" || b==true)
+				lbl_answer.setText(" Error");
+			if(op_num=="Clear" || exp.startsWith(" Error"))
+				lbl_answer.setText(" ");
+			lbl_answer_style += "-fx-font: 28pt Serif;";
+			lbl_answer.setStyle(lbl_answer_style);
+			enter = true;
+		}
+		
+		//add the number or operator
+		if(op_num!="Clear" && op_num!="Error" && !b)
+		lbl_answer.setText(lbl_answer.getText()+op_num);
+		
+		if(!enter&&exp.length()*lbl_answer.getFont().getSize()/2>lbl_answer.getWidth())
+		{
+			int lbl_answer_font_size = (int)lbl_answer.getFont().getSize()-9;
+			lbl_answer_style += "-fx-font: "+lbl_answer_font_size+" Serif;";
+			lbl_answer.setStyle(lbl_answer_style);
+			return ;
+		}
+	}
+
+	private void Calculate(String exp)
+    {
+		//check if brackets are validate or not
+		int count = 0;
+		for(int i=0;i<exp.length();i++)
+			if(exp.charAt(i)=='(')
+				count++;
+			else if(exp.charAt(i)==')')
+					count--;
+		chk("","Equal");
+		if(count!=0)
+			{chk("","Error");return ;}
+		double answer = 0;
+		//calculate
+		lbl_answer.setText(" "+answer);
+    }
+
+    private void Delete(String exp)
+    {
+    	//delete anyone word if there is exist (log, lg, sqrt, Error )
+    	while(exp.length()>1 &&exp.charAt(exp.length()-1)>='a' && exp.charAt(exp.length()-1)<='z')
+    	{
+    		exp = exp.substring(0, exp.length()-1);
+    	}
+    	//delete  ^2 if it is exist
+    	if(exp.length()>2&&exp.charAt(exp.length()-3)=='^')
+    		exp = exp.substring(0, exp.length()-2);
+    	//delete any operator or brackets
+    	else if(exp.length()>2)
+    	{
+    		switch(exp.charAt(exp.length()-2))
+    		{
+    			case '+':	case '-':
+    			case '*':	case ')':
+    			case '(':	case '/':
+    			exp = exp.substring(0, exp.length()-2);
+    		}
+       	}
+    	//delete number or space
+    	if(exp.length()>1)
+    		exp = exp.substring(0, exp.length()-1);
+    	lbl_answer.setText(exp);
+    }
+    
+    }
