@@ -1,5 +1,6 @@
 package P;
 
+import java.util.Stack;
 import javafx.application.Application;
 import javafx.beans.binding.DoubleBinding;
 import javafx.geometry.Pos;
@@ -307,6 +308,8 @@ public class Main extends Application
 			{chk("","Error");return ;}
 		double answer = 0;
 		//calculate
+		EvaluateExpression evalExp=new EvaluateExpression();
+		answer=evalExp.evaluateExp(exp);
 		lbl_answer.setText(" "+answer);
     }
 
@@ -337,4 +340,72 @@ public class Main extends Application
     	lbl_answer.setText(exp);
     }
     
+  //.......................................................................
+
+    public class EvaluateExpression{
+    	EvaluateExpression(){}
+    	public  double evaluateExp(String expression) {
+    		 //  stack to store operands
+    		 Stack<Double> operandStack = new Stack<>();
+
+    		 // stack to store operators
+    		 Stack<Character> operatorStack = new Stack<>();
+
+    		 //$$expression = insertBlanks(expression); Marwa
+
+    		// Extract operands and operators             
+    		 String[] tokens = expression.split(" ");
+
+    		 
+    		 for (String token: tokens) {
+    		 if (token.length() == 0) // Blank space
+    		 continue; // Back to the while loop to extract the next token
+    		 else if (token.charAt(0) == '+' || token.charAt(0) == '-') {
+    		 // Process all +, -, *, / in the top of the operator stack
+    		 while (!operatorStack.isEmpty() &&
+    		 (operatorStack.peek() == '+' ||
+    		 operatorStack.peek() == '-' ||
+    		 operatorStack.peek() == '*' ||
+    		 operatorStack.peek() == '/')) {
+    		//&& processAnOperator(operandStack, operatorStack); Marwa
+    		 }
+
+    		 // Push the + or - operator into the operator stack
+    		 operatorStack.push(token.charAt(0));
+    		 }
+    		 else if (token.charAt(0) == '*' || token.charAt(0) == '/') {
+    		 // Process all *, / in the top of the operator stack
+    		 while (!operatorStack.isEmpty() &&
+    		 (operatorStack.peek() == '*' ||
+    		 operatorStack.peek() == '/')) {
+    		 //$$processAnOperator(operandStack, operatorStack);   Marwa
+    		 }
+
+    		 // Push the * or / operator into the operator stack
+    		 operatorStack.push(token.charAt(0));
+    		 }
+    		 else if (token.trim().charAt(0) == '(') {
+    		 operatorStack.push('('); // Push '(' to stack
+    		 }
+    		 else if (token.trim().charAt(0) == ')') { 
+    			
+    		 while (operatorStack.peek() != '(') {
+    		 //$$processAnOperator(operandStack, operatorStack); Marwa
+    		 }
+
+    		 operatorStack.pop(); 
+    		 }
+    		 else { 
+    		 // Push an operand to the stack
+    		 operandStack.push(new Double(token));
+    		 }
+    		 }
+
+    		 while (!operatorStack.isEmpty()) {
+    		//$$ processAnOperator(operandStack, operatorStack);  Marwa
+    		 }
+
+    		 return operandStack.pop();
+    		 }
     }
+   }
