@@ -351,7 +351,7 @@ public class Main extends Application
     		 // stack to store operators
     		 Stack<Character> operatorStack = new Stack<>();
 
-    		 //$$expression = insertBlanks(expression); Marwa
+    		 expression = insertBlanks(expression); 
 
     		// Extract operands and operators             
     		 String[] tokens = expression.split(" ");
@@ -367,7 +367,7 @@ public class Main extends Application
     		 operatorStack.peek() == '-' ||
     		 operatorStack.peek() == '*' ||
     		 operatorStack.peek() == '/')) {
-    		//&& processAnOperator(operandStack, operatorStack); Marwa
+    		 processAnOperator(operandStack, operatorStack); 
     		 }
 
     		 // Push the + or - operator into the operator stack
@@ -378,7 +378,7 @@ public class Main extends Application
     		 while (!operatorStack.isEmpty() &&
     		 (operatorStack.peek() == '*' ||
     		 operatorStack.peek() == '/')) {
-    		 //$$processAnOperator(operandStack, operatorStack);   Marwa
+    		processAnOperator(operandStack, operatorStack);   
     		 }
 
     		 // Push the * or / operator into the operator stack
@@ -390,7 +390,7 @@ public class Main extends Application
     		 else if (token.trim().charAt(0) == ')') { 
     			
     		 while (operatorStack.peek() != '(') {
-    		 //$$processAnOperator(operandStack, operatorStack); Marwa
+    		 processAnOperator(operandStack, operatorStack); 
     		 }
 
     		 operatorStack.pop(); 
@@ -402,10 +402,39 @@ public class Main extends Application
     		 }
 
     		 while (!operatorStack.isEmpty()) {
-    		//$$ processAnOperator(operandStack, operatorStack);  Marwa
+    		processAnOperator(operandStack, operatorStack); 
     		 }
 
     		 return operandStack.pop();
     		 }
     }
-   }
+    public static void processAnOperator(
+    		 Stack<Double> operandStack, Stack<Character> operatorStack) {
+    		 char op = operatorStack.pop();
+    		 double op1 = operandStack.pop();
+    		 double op2 = operandStack.pop();
+    		if (op == '+')
+    		operandStack.push(op2 + op1);
+    		 else if (op == '-')
+    		 operandStack.push(op2 - op1);
+    		 else if (op == '*')
+    		 operandStack.push(op2 * op1);
+    		 else if (op == '/')
+    		 operandStack.push(op2 / op1);
+    		 }
+    		public static String insertBlanks(String s) {
+    		 String result = "";
+    		
+    		 for (int i = 0; i < s.length(); i++) {
+    		 if (s.charAt(i) == '(' || s.charAt(i) == ')' ||
+    		 s.charAt(i) == '+' || s.charAt(i) == '-' ||
+    		 s.charAt(i) == '*' || s.charAt(i) == '/')
+    		 result += " " + s.charAt(i) + " ";
+    		 else
+    		 result += s.charAt(i);
+    		 }
+    		
+    		 return result;
+    		 }
+    }
+   
