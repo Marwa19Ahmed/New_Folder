@@ -1,8 +1,11 @@
 package P;
 
-import java.util.Stack;
 import javafx.application.Application;
+import javafx.beans.InvalidationListener;
+import javafx.beans.Observable;
 import javafx.beans.binding.DoubleBinding;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -12,23 +15,23 @@ import javafx.stage.Stage;
 
 public class Main extends Application 
 {
+	private short desgin = 1;
 	private GridPane container;
 	private Label lbl_answer;
 	private Button btn_add, btn_sub, btn_div, btn_mul, btn_clear,
 		    btn_dot, btn_openBra, btn_closeBra, btn_square,
-   		    btn_sqrt, btn_delete, btn_exqual,
+   		    btn_sqrt, btn_delete, btn_equal,
    		    btn_1, btn_2, btn_3, btn_4, btn_5, btn_6,
    		    btn_7, btn_8, btn_9, btn_0, btn_lg, btn_log;
 	
     @Override
     public void start(Stage primaryStage)
     {            
-       InitiateComponents(); 	 
-       ResizeComponents();
-       SetStyles();
-       AddComponents();
-       EventHandler();
-       
+       initiateComponents(); 	 
+       resizeComponents();
+       Design1(); //Default Design
+       setStyles();
+       eventHandler();
        Scene scene = new Scene(container, 350, 550);
        
        primaryStage.fullScreenExitHintProperty().set("");
@@ -40,12 +43,12 @@ public class Main extends Application
        
     }
    
-    public static void main(String[] args) 
+	public static void main(String[] args) 
     {
         launch(args);
     }
     
-    private void InitiateComponents()
+    private void initiateComponents()
     {
     	container = new GridPane();
     	btn_add = new Button("+");
@@ -59,7 +62,7 @@ public class Main extends Application
     	btn_square = new Button("^2");
     	btn_sqrt = new Button("S");
     	btn_delete = new Button("<-");
-    	btn_exqual = new Button("=");
+    	btn_equal = new Button("=");
     	btn_1 = new Button("1");
     	btn_2 = new Button("2");
     	btn_3 = new Button("3");
@@ -74,14 +77,25 @@ public class Main extends Application
     	btn_lg = new Button("lg");
     	lbl_answer = new Label();
     }
-   
-    private void ResizeComponents()
+  
+    private void resizeComponents()
     {
-    	lbl_answer.prefWidthProperty().bind(container.widthProperty().subtract(15));
-        lbl_answer.prefHeightProperty().bind(container.heightProperty().divide(2));
-        
-        DoubleBinding btn_width = container.widthProperty().divide(3);
-        DoubleBinding btn_height = container.heightProperty().subtract(35).divide(9);
+    	DoubleBinding btn_height;
+    	DoubleBinding btn_width;
+    	if(desgin==1)
+    	{
+    		lbl_answer.prefHeightProperty().bind(container.heightProperty().divide(4));
+    		btn_height = container.heightProperty().divide(9);
+    		btn_width = container.widthProperty().divide(3);
+    	}
+    	else
+    	{
+    		lbl_answer.prefHeightProperty().bind(container.heightProperty().divide(2));
+    		btn_height = container.heightProperty().divide(7);
+    		btn_width = container.widthProperty().divide(6).subtract(7);
+    	}
+    	
+    	lbl_answer.prefWidthProperty().bind(container.widthProperty().subtract(15)); 
         
         //reset width to all button on changing in container's width
         btn_add.prefWidthProperty().bind(btn_width);
@@ -95,7 +109,7 @@ public class Main extends Application
      	btn_square.prefWidthProperty().bind(btn_width);
      	btn_sqrt.prefWidthProperty().bind(btn_width);
      	btn_delete.prefWidthProperty().bind(btn_width);
-     	btn_exqual.prefWidthProperty().bind(btn_width);
+     	btn_equal.prefWidthProperty().bind(btn_width);
      	
      	btn_1.prefWidthProperty().bind(btn_width);
      	btn_2.prefWidthProperty().bind(btn_width);
@@ -122,7 +136,7 @@ public class Main extends Application
      	btn_square.prefHeightProperty().bind(btn_height);
      	btn_sqrt.prefHeightProperty().bind(btn_height);
      	btn_delete.prefHeightProperty().bind(btn_height);
-     	btn_exqual.prefHeightProperty().bind(btn_height);
+     	btn_equal.prefHeightProperty().bind(btn_height);
      	
      	btn_1.prefHeightProperty().bind(btn_height);
      	btn_2.prefHeightProperty().bind(btn_height);
@@ -138,8 +152,10 @@ public class Main extends Application
      	btn_lg.prefHeightProperty().bind(btn_height);
     }
     
-    private void AddComponents()
+    private void Design1()
     {  	    
+    	desgin=1;
+    	container.getChildren().clear();
          container.add(lbl_answer,1,1,6,2);
          
          //Add column 1
@@ -164,7 +180,7 @@ public class Main extends Application
          container.add(btn_9,3,6);
          container.add(btn_6,3,7);
          container.add(btn_3,3,8);
-         container.add(btn_exqual,3,9);
+         container.add(btn_equal,3,9);
          
          //Add column 4
          container.add(btn_delete,4,4);
@@ -173,10 +189,58 @@ public class Main extends Application
          container.add(btn_sub,4,7);
          container.add(btn_mul,4,8);
          container.add(btn_div,4,9);
-         
+         resizeComponents();
+         if(lbl_answer.getText().isEmpty())
+        	 check("Clear");
+         else
+        	 check("Equal");
     }
     
-    private void SetStyles()
+    private void Design2()
+    {  	    
+    	 desgin=2;
+    	 container.getChildren().clear();
+         container.add(lbl_answer,1,1,6,2);
+         
+         //Add row 1
+         container.add(btn_7,1,3);
+         container.add(btn_8,2,3);
+         container.add(btn_9,3,3);
+         container.add(btn_add,4,3);
+         container.add(btn_openBra,5,3);
+         container.add(btn_closeBra,6,3);
+         
+         //Add row 2
+         container.add(btn_4,1,4);
+         container.add(btn_5,2,4);
+         container.add(btn_6,3,4);
+         container.add(btn_sub,4,4);
+         container.add(btn_sqrt,5,4);
+         container.add(btn_square,6,4);
+         
+         //Add row 3
+         container.add(btn_1,1,5);
+         container.add(btn_2,2,5);
+         container.add(btn_3,3,5);
+         container.add(btn_mul,4,5);
+         container.add(btn_clear,5,5);
+         container.add(btn_delete,6,5);
+         
+         //Add row 4
+         container.add(btn_0,1,6);
+         container.add(btn_dot,2,6);
+         container.add(btn_equal,3,6);
+         container.add(btn_div,4,6);
+         container.add(btn_log,5,6);
+         container.add(btn_lg,6,6);
+         resizeComponents();
+         if(lbl_answer.getText().isEmpty())
+        	 check("Clear");
+         else
+        	 check("Equal");
+    }
+    
+    private void setStyles()
     {
         container.setHgap(5);
         container.setVgap(5);
@@ -192,7 +256,7 @@ public class Main extends Application
     	String style_to_all_button = "-fx-background-radius: "+
     			"0;-fx-base: rgb(46, 46, 46); -fx-font: 18pt Serif;";
     	
-    	btn_exqual.setStyle("-fx-background-radius: 0; -fx-base: #C0392b");
+    	btn_equal.setStyle("-fx-background-radius: 0; -fx-base: #C0392b; -fx-font: 20pt Serif;");
     	btn_add.setStyle(style_to_all_button);
      	btn_sub.setStyle(style_to_all_button);
      	btn_div.setStyle(style_to_all_button);
@@ -220,111 +284,114 @@ public class Main extends Application
      	btn_0.setStyle(style_to_all_button);
     }
     
-    private void EventHandler()
+    private void eventHandler()
     {
        	lbl_answer.setText(" ");
        	
        	//check the lbl_answer if it is valid or not before writing 
-        btn_0.setOnAction(e->{chk(lbl_answer.getText(),"0");});
-	   	btn_1.setOnAction(e->{chk(lbl_answer.getText(),"1");});
-	   	btn_2.setOnAction(e->{chk(lbl_answer.getText(),"2");});
-	   	btn_3.setOnAction(e->{chk(lbl_answer.getText(),"3");});
-	   	btn_4.setOnAction(e->{chk(lbl_answer.getText(),"4");});
-	   	btn_5.setOnAction(e->{chk(lbl_answer.getText(),"5");});
-	   	btn_6.setOnAction(e->{chk(lbl_answer.getText(),"6");});
-	   	btn_7.setOnAction(e->{chk(lbl_answer.getText(),"7");});
-	   	btn_8.setOnAction(e->{chk(lbl_answer.getText(),"8");});
-	   	btn_9.setOnAction(e->{chk(lbl_answer.getText(),"9");});
-	   	btn_dot.setOnAction(e->{chk(lbl_answer.getText(),".");});
+        btn_0.setOnAction(e->{check("0");});
+	   	btn_1.setOnAction(e->{check("1");});
+	   	btn_2.setOnAction(e->{check("2");});
+	   	btn_3.setOnAction(e->{check("3");});
+	   	btn_4.setOnAction(e->{check("4");});
+	   	btn_5.setOnAction(e->{check("5");});
+	   	btn_6.setOnAction(e->{check("6");});
+	   	btn_7.setOnAction(e->{check("7");});
+	   	btn_8.setOnAction(e->{check("8");});
+	   	btn_9.setOnAction(e->{check("9");});
+	   	btn_dot.setOnAction(e->{check(".");});
 	   	
-	   	btn_add.setOnAction(e->{chk(lbl_answer.getText()," + ");});
-    	btn_sub.setOnAction(e->{chk(lbl_answer.getText()," - ");});
-    	btn_div.setOnAction(e->{chk(lbl_answer.getText()," / ");});
-    	btn_mul.setOnAction(e->{chk(lbl_answer.getText()," * ");});
+	   	btn_add.setOnAction(e->{check(" + ");});
+    	btn_sub.setOnAction(e->{check(" - ");});
+    	btn_div.setOnAction(e->{check(" / ");});
+    	btn_mul.setOnAction(e->{check(" * ");});
     	
-    	btn_openBra.setOnAction(e->{chk(lbl_answer.getText()," ( ");});
-    	btn_closeBra.setOnAction(e->{chk(lbl_answer.getText()," ) ");});
-    	btn_square.setOnAction(e->{chk(lbl_answer.getText(),"^2 ");});
-    	btn_sqrt.setOnAction(e->{chk(lbl_answer.getText()," sqrt");});
-    	btn_log.setOnAction(e->{chk(lbl_answer.getText()," log");});
-    	btn_lg.setOnAction(e->{chk(lbl_answer.getText()," log");});
+    	btn_openBra.setOnAction(e->{check(" ( ");});
+    	btn_closeBra.setOnAction(e->{check(" ) ");});
+    	btn_square.setOnAction(e->{check(" )^2");});
+    	btn_sqrt.setOnAction(e->{check(" sqrt( ");});
+    	btn_log.setOnAction(e->{check(" log( ");});
+    	btn_lg.setOnAction(e->{check(" lg( ");});
     	
-    	btn_clear.setOnAction(e->{chk(lbl_answer.getText(),"Clear");});
-    	btn_delete.setOnAction(e->{Delete(lbl_answer.getText());});
-    	btn_exqual.setOnAction(e->{Calculate(lbl_answer.getText());});
+    	btn_clear.setOnAction(e->{check("Clear");});
+    	btn_delete.setOnAction(e->{delete(lbl_answer.getText());});
+    	btn_equal.setOnAction(e->{calculate(lbl_answer.getText());});
+    	
+    	//if the size changed, the design will change
+    	 container.widthProperty().addListener(new ChangeListener<Number>() {
+      	    @Override public void changed(ObservableValue<? extends Number> observableValue, Number oldSceneWidth, Number newSceneWidth) {
+      	    	if(container.heightProperty().doubleValue()>
+      	    	container.widthProperty().doubleValue() )
+      	    		Design1();
+      	    	else
+      	    		Design2();
+      	    }
+      	});
+         
+         container.heightProperty().addListener(new ChangeListener<Number>() {
+      	    @Override public void changed(ObservableValue<? extends Number> observableValue, Number oldSceneHeight, Number newSceneHeight) {
+      	       if(container.heightProperty().doubleValue()<=
+      	    		  container.widthProperty().doubleValue() )
+      	    	   Design2();
+      	       else
+      	    	   Design1();
+      	    }
+      	});
+         
+         //if the text's length is larger than label's size ,the text's font will change
+         lbl_answer.textProperty().addListener(new InvalidationListener() {
+			
+			@Override
+			public void invalidated(Observable arg0) {
+				
+				double numbers = 0;
+				double symbol = 0;
+				double space = 0;
+				for(int i=0;i<lbl_answer.getText().length();i++)
+					if(lbl_answer.getText().charAt(i)<='9'&&lbl_answer.getText().charAt(i)>='0')
+						numbers++;
+					else if (lbl_answer.getText().charAt(i)==' ')
+						space++;
+					else
+						symbol++;
+				double numbers_font_size = numbers*lbl_answer.getFont().getSize()/2;
+				double symbol_font_size = symbol/1.5*lbl_answer.getFont().getSize()/2;
+				double space_font_size = space*lbl_answer.getFont().getSize()/3;
+				String lbl_answer_style = "-fx-border-radius: 0; " +
+			    		   "-fx-background-radius: 0;"+
+			    		   "-fx-background-color: rgb(30, 30, 30);"+
+			    		   "-fx-border-color: rgb(150, 30, 30);";
+				int lbl_answer_font_size = (int)lbl_answer.getFont().getSize();
+				if(numbers_font_size+symbol_font_size+space_font_size>lbl_answer.getWidth())
+				{
+					lbl_answer_font_size-=9;
+					lbl_answer_style += "-fx-font: "+lbl_answer_font_size+" Serif;";
+					lbl_answer.setStyle(lbl_answer_style);					
+				}
+				if(lbl_answer_font_size<19)
+					check("Error");
+			}
+		}); 
+       	
     }
     
-    private void chk(String exp,String op_num)
+    private void delete(String exp)
     {
-    	//reset style to label if the size of string is bigger than label's width
-    	String lbl_answer_style = "-fx-border-radius: 0; " +
-	    		   "-fx-background-radius: 0;"+
-	    		   "-fx-background-color: rgb(30, 30, 30);"+
-	    		   "-fx-border-color: rgb(150, 30, 30);";
-    		    	
-    	//check the font 
-	    	boolean b = false;
-    		if(lbl_answer.getFont().getSize()-9<=10 && 
-    				exp.length()*lbl_answer.getFont().getSize()/2>lbl_answer.getWidth())
-    			b = true;
+    	//delete anyone word if there is exist (log(, lg(, sqrt(, Error, Infinity )
+    	if(exp.endsWith("sqrt( "))
+    		exp = exp.substring(0,exp.length()-6);
+    	else if(exp.endsWith("log( ")||exp.endsWith("Error"))
+    				exp = exp.substring(0,exp.length()-5);
+    	else if(exp.endsWith("lg( "))
+    		exp = exp.substring(0,exp.length()-4);
+    	else if(exp.endsWith("Infinity"))
+    		exp = exp.substring(0,exp.length()-8);
     	
-    	//check for clear word or error word or error calculation
-    	boolean enter = false;
-		if( exp.startsWith(" Error") || b==true || op_num=="Clear" || op_num=="Error" || op_num=="Equal")
-		{
-			if(op_num=="Error" || b==true)
-				lbl_answer.setText(" Error");
-			if(op_num=="Clear" || exp.startsWith(" Error"))
-				lbl_answer.setText(" ");
-			lbl_answer_style += "-fx-font: 28pt Serif;";
-			lbl_answer.setStyle(lbl_answer_style);
-			enter = true;
-		}
-		
-		//add the number or operator
-		if(op_num!="Clear" && op_num!="Error" && !b)
-		lbl_answer.setText(lbl_answer.getText()+op_num);
-		
-		if(!enter&&exp.length()*lbl_answer.getFont().getSize()/2>lbl_answer.getWidth())
-		{
-			int lbl_answer_font_size = (int)lbl_answer.getFont().getSize()-9;
-			lbl_answer_style += "-fx-font: "+lbl_answer_font_size+" Serif;";
-			lbl_answer.setStyle(lbl_answer_style);
-			return ;
-		}
-	}
-
-	private void Calculate(String exp)
-    {
-		//check if brackets are validate or not
-		int count = 0;
-		for(int i=0;i<exp.length();i++)
-			if(exp.charAt(i)=='(')
-				count++;
-			else if(exp.charAt(i)==')')
-					count--;
-		chk("","Equal");
-		if(count!=0)
-			{chk("","Error");return ;}
-		double answer = 0;
-		//calculate
-		EvaluateExpression evalExp=new EvaluateExpression();
-		answer=evalExp.evaluateExp(exp);
-		lbl_answer.setText(" "+answer);
-    }
-
-    private void Delete(String exp)
-    {
-    	//delete anyone word if there is exist (log, lg, sqrt, Error )
-    	while(exp.length()>1 &&exp.charAt(exp.length()-1)>='a' && exp.charAt(exp.length()-1)<='z')
-    	{
-    		exp = exp.substring(0, exp.length()-1);
-    	}
     	//delete  ^2 if it is exist
-    	if(exp.length()>2&&exp.charAt(exp.length()-3)=='^')
-    		exp = exp.substring(0, exp.length()-2);
+    	else if(exp.length()>2&&exp.charAt(exp.length()-2)=='^')
+    		exp = exp.substring(0, exp.length()-3);
     	//delete any operator or brackets
-    	else if(exp.length()>2)
+    	else if(exp.length()>2&&exp.charAt(exp.length()-1)==' ')
     	{
     		switch(exp.charAt(exp.length()-2))
     		{
@@ -340,101 +407,139 @@ public class Main extends Application
     	lbl_answer.setText(exp);
     }
     
-  //.......................................................................
+    private void check(String op_num)
+    {
+    	//check for clear, error and Infinity words or error calculation
+    	
+		if( lbl_answer.getText().startsWith(" Error") || lbl_answer.getText().endsWith("Infinity") || op_num=="Clear" 
+				|| op_num==(" Infinity") || op_num=="Error")
+		{
+			if(op_num=="Error")
+				lbl_answer.setText(" Error");
+			else if(op_num=="Clear" || lbl_answer.getText().startsWith(" Error")||lbl_answer.getText().startsWith(" Infinity"))
+				lbl_answer.setText(" ");
+			else if(op_num==(" Infinity"))
+				lbl_answer.setText(" Infinity");
+			setStyles();
+		}
+		
+		//add the number or operator
+		if(op_num!=" Infinity" && op_num!="Equal" && op_num!="Clear" && op_num!="Error")
+		lbl_answer.setText(lbl_answer.getText()+op_num);
+		
+	}
 
-    public class EvaluateExpression{
-    	EvaluateExpression(){}
-    	public  double evaluateExp(String expression) {
-    		 //  stack to store operands
-    		 Stack<Double> operandStack = new Stack<>();
-
-    		 // stack to store operators
-    		 Stack<Character> operatorStack = new Stack<>();
-
-    		 expression = insertBlanks(expression); 
-
-    		// Extract operands and operators             
-    		 String[] tokens = expression.split(" ");
-
-    		 
-    		 for (String token: tokens) {
-    		 if (token.length() == 0) // Blank space
-    		 continue; // Back to the while loop to extract the next token
-    		 else if (token.charAt(0) == '+' || token.charAt(0) == '-') {
-    		 // Process all +, -, *, / in the top of the operator stack
-    		 while (!operatorStack.isEmpty() &&
-    		 (operatorStack.peek() == '+' ||
-    		 operatorStack.peek() == '-' ||
-    		 operatorStack.peek() == '*' ||
-    		 operatorStack.peek() == '/')) {
-    		 processAnOperator(operandStack, operatorStack); 
-    		 }
-
-    		 // Push the + or - operator into the operator stack
-    		 operatorStack.push(token.charAt(0));
-    		 }
-    		 else if (token.charAt(0) == '*' || token.charAt(0) == '/') {
-    		 // Process all *, / in the top of the operator stack
-    		 while (!operatorStack.isEmpty() &&
-    		 (operatorStack.peek() == '*' ||
-    		 operatorStack.peek() == '/')) {
-    		processAnOperator(operandStack, operatorStack);   
-    		 }
-
-    		 // Push the * or / operator into the operator stack
-    		 operatorStack.push(token.charAt(0));
-    		 }
-    		 else if (token.trim().charAt(0) == '(') {
-    		 operatorStack.push('('); // Push '(' to stack
-    		 }
-    		 else if (token.trim().charAt(0) == ')') { 
-    			
-    		 while (operatorStack.peek() != '(') {
-    		 processAnOperator(operandStack, operatorStack); 
-    		 }
-
-    		 operatorStack.pop(); 
-    		 }
-    		 else { 
-    		 // Push an operand to the stack
-    		 operandStack.push(new Double(token));
-    		 }
-    		 }
-
-    		 while (!operatorStack.isEmpty()) {
-    		processAnOperator(operandStack, operatorStack); 
-    		 }
-
-    		 return operandStack.pop();
-    		 }
+	private void calculate(String exp)
+    {
+		//calculate
+		double cal = 0;
+		try
+		{	
+			//handle the negative number
+			while(exp.contains("(  -"))
+				exp = exp.replace("(  -", "( 0 -");
+			//handle the first expression
+	    	int first_operation = Math.max(exp.lastIndexOf("log("),Math.max(exp.lastIndexOf("lg("),
+	    			Math.max(exp.lastIndexOf("sqrt( "),exp.lastIndexOf(")^2"))));
+	    	while(first_operation>=0)
+	    	{
+	    		if(exp.substring(first_operation, first_operation+2).equals(")^"))
+	    		{
+	    			cal = Math.pow(evaluateExp(exp.substring(exp.lastIndexOf('(')+1, first_operation)), 2);
+	    			exp = exp.replace(exp.substring(exp.lastIndexOf('('), first_operation+3),""+cal); 
+	    		}
+	    		else
+	    		{
+		    		String sub_str = exp.substring(exp.indexOf('(',first_operation)+1, exp.indexOf(')',first_operation)); 
+		    		switch(exp.substring(first_operation, first_operation+2))
+		    		{
+		    			case "lo":cal = Math.log10(evaluateExp(sub_str));break;
+		    			case "sq":cal = Math.sqrt(evaluateExp(sub_str));break;
+		    			case "lg":cal = Math.log10(evaluateExp(sub_str))/Math.log10(2);
+		    		}
+		    		exp = exp.replace(exp.substring(first_operation-1, exp.indexOf(')')+1), ""+cal);
+	    		}
+	     		first_operation = Math.max(exp.lastIndexOf("log("),Math.max(exp.lastIndexOf("lg("),
+	        			Math.max(exp.lastIndexOf("sqrt("),exp.lastIndexOf("^2"))));
+	    	}
+	    	if(new Double(cal).isInfinite())
+	    		cal = Double.POSITIVE_INFINITY;
+	    	else
+	    		cal = evaluateExp(exp);
+		}
+		catch(Exception e)
+		{
+			check("Error");return ;
+		}
+    	if(new Double(cal).isInfinite())
+    		{check(" Infinity");}
+    	else
+    		{cal = evaluateExp(exp);lbl_answer.setText(" "+cal);check("Equal");}
     }
-    public static void processAnOperator(
-    		 Stack<Double> operandStack, Stack<Character> operatorStack) {
-    		 char op = operatorStack.pop();
-    		 double op1 = operandStack.pop();
-    		 double op2 = operandStack.pop();
-    		if (op == '+')
-    		operandStack.push(op2 + op1);
-    		 else if (op == '-')
-    		 operandStack.push(op2 - op1);
-    		 else if (op == '*')
-    		 operandStack.push(op2 * op1);
-    		 else if (op == '/')
-    		 operandStack.push(op2 / op1);
-    		 }
-    		public static String insertBlanks(String s) {
-    		 String result = "";
-    		
-    		 for (int i = 0; i < s.length(); i++) {
-    		 if (s.charAt(i) == '(' || s.charAt(i) == ')' ||
-    		 s.charAt(i) == '+' || s.charAt(i) == '-' ||
-    		 s.charAt(i) == '*' || s.charAt(i) == '/')
-    		 result += " " + s.charAt(i) + " ";
-    		 else
-    		 result += s.charAt(i);
-    		 }
-    		
-    		 return result;
-    		 }
-    }
+	
+    private double evaluateExp(String exp)
+    {
+    	boolean contain_operand = true;
+    	while(exp.indexOf('(')>=0||contain_operand)
+    	{
+    	  if(exp.charAt(exp.length()-1)!=' ')
+      		exp += " ";
+      		if(exp.charAt(1)!='('&&exp.charAt(2)!='(')
+      			exp = " ("+exp+") ";
+		 	char last;
+		   	double op1=0,op2=0;
+		   	exp = exp.replaceAll("  ", " ");
+		   	String temp_exp  = exp.substring(exp.lastIndexOf('('),
+		   			exp.indexOf(')',exp.lastIndexOf('('))+1);
+		   	contain_operand = (temp_exp.contains(" + ") || temp_exp.contains(" - ") ||
+    			temp_exp.contains(" * ") || temp_exp.contains(" / ") );
+		   	if(contain_operand)
+		   	{
+			   	String[] op = temp_exp.split(" ");
+			   	//handle the first operation
+			   	op1 = new Double(op[1]);
+			   	last = op[2].charAt(0);
+			   	op2 = new Double(op[3]);
+			   	//handle and calculate the next operation
+			   	for(int i = 4;i<op.length;i++)
+			   	{
+			   		if(op[i].charAt(0)=='+' || op[i].charAt(0)=='-')
+			   		{
+			 			switch(last)
+			   			{
+			   				case'+':op1 += op2; break;
+			   				case'-':op1 -= op2; break;
+			   				case'*':op1 *= op2; break;
+			   				case'/':op1 /= op2; break;
+			   			}
+			   			op2 = new Double(op[i+1]);
+			   			last = op[i].charAt(0);
+			   		}
+			   		else if(op[i].charAt(0)=='*' || op[i].charAt(0)=='/')
+			   		{
+			   			if(op[i].charAt(0) == '*')
+			   				op2 *= new Double(op[i+1]);
+			   			else
+			   				op2 /= new Double(op[i+1]);
+			   		}
+			   	}		    	
+			   	//calculate the last operation in priority
+			   	switch(last)
+				{
+					case'+':op1 += op2; break;
+					case'-':op1 -= op2; break;
+					case'*':op1 *= op2; break;
+					case'/':op1 /= op2; break;
+				}		    	
+			   	exp = exp.replace(exp.substring(exp.lastIndexOf('('),
+			   			exp.indexOf(')',exp.lastIndexOf('('))+1),""+op1);	
+			   	}
+		      else 
+		          if(exp.indexOf('(')>-1)
+		        	  exp = exp.replace(exp.substring(exp.lastIndexOf('('), exp.indexOf(')')+1),exp.substring(exp.lastIndexOf('(')+1, exp.indexOf(')')));
+    	}
+    		return new Double(exp);
+    	}
+
+}
    
