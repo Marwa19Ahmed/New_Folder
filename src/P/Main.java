@@ -1,5 +1,6 @@
 package P;
 
+import java.util.Stack;
 import javafx.application.Application;
 import javafx.beans.InvalidationListener;
 import javafx.beans.Observable;
@@ -33,14 +34,12 @@ public class Main extends Application
        setStyles();
        eventHandler();
        Scene scene = new Scene(container, 350, 550);
-       
-       primaryStage.fullScreenExitHintProperty().set("");
+       primaryStage.setFullScreenExitHint("");
        primaryStage.setFullScreen(true);
        primaryStage.centerOnScreen();
        primaryStage.setTitle("3MG Calculator");
        primaryStage.setScene(scene);
        primaryStage.show();
-       
     }
    
 	public static void main(String[] args) 
@@ -431,41 +430,54 @@ public class Main extends Application
 
 	private void calculate(String exp)
     {
-		//calculate
 		double cal = 0;
+		Stack<Comparable> st = new Stack<Comparable>();
+		st.push('(');
 		try
-		{	
-			//handle the negative number
-			while(exp.contains("(  -"))
-				exp = exp.replace("(  -", "( 0 -");
-			//handle the first expression
-	    	int first_operation = Math.max(exp.lastIndexOf("log("),Math.max(exp.lastIndexOf("lg("),
-	    			Math.max(exp.lastIndexOf("sqrt( "),exp.lastIndexOf(")^2"))));
-	    	while(first_operation>=0)
-	    	{
-	    		if(exp.substring(first_operation, first_operation+2).equals(")^"))
-	    		{
-	    			cal = Math.pow(evaluateExp(exp.substring(exp.lastIndexOf('(')+1, first_operation)), 2);
-	    			exp = exp.replace(exp.substring(exp.lastIndexOf('('), first_operation+3),""+cal); 
-	    		}
-	    		else
-	    		{
-		    		String sub_str = exp.substring(exp.indexOf('(',first_operation)+1, exp.indexOf(')',first_operation)); 
-		    		switch(exp.substring(first_operation, first_operation+2))
-		    		{
-		    			case "lo":cal = Math.log10(evaluateExp(sub_str));break;
-		    			case "sq":cal = Math.sqrt(evaluateExp(sub_str));break;
-		    			case "lg":cal = Math.log10(evaluateExp(sub_str))/Math.log10(2);
-		    		}
-		    		exp = exp.replace(exp.substring(first_operation-1, exp.indexOf(')')+1), ""+cal);
-	    		}
-	     		first_operation = Math.max(exp.lastIndexOf("log("),Math.max(exp.lastIndexOf("lg("),
-	        			Math.max(exp.lastIndexOf("sqrt("),exp.lastIndexOf("^2"))));
-	    	}
-	    	if(new Double(cal).isInfinite())
-	    		cal = Double.POSITIVE_INFINITY;
-	    	else
-	    		cal = evaluateExp(exp);
+		{
+			for(int i=0;i<exp.length();i++)
+			{
+				if(exp.charAt(i)==')') 
+				{
+					String s = ")";
+					while(!st.peek().equals('('))
+						s = st.pop() + s;
+					s = st.pop() + s;
+					if(st.peek().equals('t')) 			//sqrt()
+					{
+						while(!st.peek().equals('s')) 
+							st.pop();st.pop();
+						st.push(Math.sqrt(evaluateExp(s)));						
+					}
+					else if(st.peek().equals('g'))    //log() or lg()
+					{
+						st.pop();
+						if(st.peek().equals('o'))    // log()
+						{
+							st.pop();st.pop();
+							st.push(Math.log10(evaluateExp(s)));	
+						}
+						else    					//lg()
+						{
+							st.pop();
+							st.push(Math.log10(evaluateExp(s))/Math.log10(2));
+						}
+					}
+					else if(exp.charAt(i+1)=='^')    // ()^2
+					{
+						st.push(Math.pow(evaluateExp(s),2));
+						i+=2;
+					}
+					else
+						st.push(evaluateExp(s)); //( + * - / )
+				}
+				else
+					st.push(exp.charAt(i));
+			}
+		String s = " ) ";
+		while(!st.isEmpty())
+			s = st.pop() + s;
+	    cal = evaluateExp(s);
 		}
 		catch(Exception e)
 		{
@@ -474,7 +486,7 @@ public class Main extends Application
     	if(new Double(cal).isInfinite())
     		{check(" Infinity");}
     	else
-    		{cal = evaluateExp(exp);lbl_answer.setText(" "+cal);check("Equal");}
+    		{lbl_answer.setText(" "+cal);check("Equal");}
     }
 	
     private double evaluateExp(String exp)
