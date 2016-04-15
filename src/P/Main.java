@@ -492,22 +492,18 @@ public class Main extends Application
     private double evaluateExp(String exp)
     {
     	boolean contain_operand = true;
-    	while(exp.indexOf('(')>=0||contain_operand)
+    	exp = exp.replace("(", " ");
+	   	exp = exp.replace(")", " ");
+    	while(contain_operand)
     	{
-    	  if(exp.charAt(exp.length()-1)!=' ')
-      		exp += " ";
-      		if(exp.charAt(1)!='('&&exp.charAt(2)!='(')
-      			exp = " ("+exp+") ";
 		 	char last;
 		   	double op1=0,op2=0;
 		   	exp = exp.replaceAll("  ", " ");
-		   	String temp_exp  = exp.substring(exp.lastIndexOf('('),
-		   			exp.indexOf(')',exp.lastIndexOf('('))+1);
-		   	contain_operand = (temp_exp.contains(" + ") || temp_exp.contains(" - ") ||
-    			temp_exp.contains(" * ") || temp_exp.contains(" / ") );
+		   	contain_operand = exp.contains(" + ") || exp.contains(" - ") ||
+    			exp.contains(" * ") || exp.contains(" / ") ;
 		   	if(contain_operand)
 		   	{
-			   	String[] op = temp_exp.split(" ");
+			   	String[] op = exp.split(" ");
 			   	//handle the first operation
 			   	op1 = new Double(op[1]);
 			   	last = op[2].charAt(0);
@@ -543,13 +539,9 @@ public class Main extends Application
 					case'*':op1 *= op2; break;
 					case'/':op1 /= op2; break;
 				}		    	
-			   	exp = exp.replace(exp.substring(exp.lastIndexOf('('),
-			   			exp.indexOf(')',exp.lastIndexOf('('))+1),""+op1);	
+			   	exp = ""+op1;	
 			   	}
-		      else 
-		          if(exp.indexOf('(')>-1)
-		        	  exp = exp.replace(exp.substring(exp.lastIndexOf('('), exp.indexOf(')')+1),exp.substring(exp.lastIndexOf('(')+1, exp.indexOf(')')));
-    	}
+		     }
     		return new Double(exp);
     	}
 
