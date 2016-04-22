@@ -492,8 +492,8 @@ public class Main extends Application
     private double evaluateExp(String exp)
     {
     	boolean contain_operand = true;
-    	exp = exp.replace("(", " ");
-	   	exp = exp.replace(")", " ");
+    	exp = exp.replace("(", "");
+	   	exp = exp.replace(")", "");
     	while(contain_operand)
     	{
 		 	char last;
