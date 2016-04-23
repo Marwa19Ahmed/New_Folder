@@ -1,5 +1,7 @@
 package P;
 
+
+import java.math.BigInteger;
 import java.util.Stack;
 import javafx.application.Application;
 import javafx.beans.InvalidationListener;
@@ -21,21 +23,24 @@ public class Main extends Application
 	private Label lbl_answer;
 	private Button btn_add, btn_sub, btn_div, btn_mul, btn_clear,
 		    btn_dot, btn_openBra, btn_closeBra, btn_square,
-   		    btn_sqrt, btn_delete, btn_equal,
+   		    btn_sqrt, btn_delete, btn_equal, btn_PI,
    		    btn_1, btn_2, btn_3, btn_4, btn_5, btn_6,
-   		    btn_7, btn_8, btn_9, btn_0, btn_lg, btn_log;
+   		    btn_7, btn_8, btn_9, btn_0, btn_lg, btn_log,
+   		    btn_mod, btn_sin, btn_cos, btn_tan,
+   		    btn_sinh, btn_cosh, btn_tanh, btn_fact;
 	
     @Override
     public void start(Stage primaryStage)
     {            
        initiateComponents(); 	 
        resizeComponents();
-       Design1(); //Default Design
+       design1(); //Default Design
        setStyles();
        eventHandler();
+       
        Scene scene = new Scene(container, 350, 550);
        primaryStage.setFullScreenExitHint("");
-       primaryStage.setFullScreen(true);
+       //primaryStage.setFullScreen(true);
        primaryStage.centerOnScreen();
        primaryStage.setTitle("3MG Calculator");
        primaryStage.setScene(scene);
@@ -54,13 +59,13 @@ public class Main extends Application
     	btn_sub = new Button("-");
     	btn_div = new Button("/");
     	btn_mul = new Button("*");
-    	btn_clear = new Button("C");
+    	btn_clear = new Button("AC");
     	btn_dot = new Button(".");
     	btn_openBra = new Button("(");
     	btn_closeBra = new Button(")");
     	btn_square = new Button("^2");
     	btn_sqrt = new Button("S");
-    	btn_delete = new Button("<-");
+    	btn_delete = new Button("C");
     	btn_equal = new Button("=");
     	btn_1 = new Button("1");
     	btn_2 = new Button("2");
@@ -74,6 +79,15 @@ public class Main extends Application
     	btn_0 = new Button("0");
     	btn_log = new Button("log");
     	btn_lg = new Button("lg");
+    	btn_mod = new Button("%");
+    	btn_sin = new Button("Sin");
+    	btn_cos = new Button("Cos");
+    	btn_tan = new Button("Tan");
+    	btn_sinh = new Button("Sinh");
+    	btn_cosh = new Button("Cosh");
+    	btn_tanh = new Button("Tanh");
+    	btn_fact = new Button("!");
+    	btn_PI = new Button("PI");
     	lbl_answer = new Label();
     }
   
@@ -86,12 +100,14 @@ public class Main extends Application
     		lbl_answer.prefHeightProperty().bind(container.heightProperty().divide(4));
     		btn_height = container.heightProperty().divide(9);
     		btn_width = container.widthProperty().divide(3);
+    		btn_0.prefWidthProperty().bind(btn_width.divide(1.45));
     	}
     	else
     	{
-    		lbl_answer.prefHeightProperty().bind(container.heightProperty().divide(2));
-    		btn_height = container.heightProperty().divide(7);
-    		btn_width = container.widthProperty().divide(6).subtract(7);
+    		lbl_answer.prefHeightProperty().bind(container.heightProperty().multiply(8));
+    		btn_height = container.heightProperty().divide(8);
+    		btn_width = container.widthProperty().divide(7).subtract(7);
+    		btn_0.prefWidthProperty().bind(btn_width.multiply(2.05));
     	}
     	
     	lbl_answer.prefWidthProperty().bind(container.widthProperty().subtract(15)); 
@@ -108,6 +124,16 @@ public class Main extends Application
      	btn_square.prefWidthProperty().bind(btn_width);
      	btn_sqrt.prefWidthProperty().bind(btn_width);
      	btn_delete.prefWidthProperty().bind(btn_width);
+     	btn_sin.prefWidthProperty().bind(btn_width);
+     	btn_cos.prefWidthProperty().bind(btn_width);
+     	btn_tan.prefWidthProperty().bind(btn_width);
+     	btn_sinh.prefWidthProperty().bind(btn_width);
+     	btn_cosh.prefWidthProperty().bind(btn_width);
+     	btn_tanh.prefWidthProperty().bind(btn_width);
+     	btn_fact.prefWidthProperty().bind(btn_width);
+     	btn_mod.prefWidthProperty().bind(btn_width);
+     	btn_mod.prefWidthProperty().bind(btn_width);
+     	btn_PI.prefWidthProperty().bind(btn_width);
      	btn_equal.prefWidthProperty().bind(btn_width);
      	
      	btn_1.prefWidthProperty().bind(btn_width);
@@ -119,7 +145,6 @@ public class Main extends Application
      	btn_7.prefWidthProperty().bind(btn_width);
      	btn_8.prefWidthProperty().bind(btn_width);
      	btn_9.prefWidthProperty().bind(btn_width);
-     	btn_0.prefWidthProperty().bind(btn_width);
      	btn_lg.prefWidthProperty().bind(btn_width);
      	btn_log.prefWidthProperty().bind(btn_width);
      	
@@ -135,7 +160,16 @@ public class Main extends Application
      	btn_square.prefHeightProperty().bind(btn_height);
      	btn_sqrt.prefHeightProperty().bind(btn_height);
      	btn_delete.prefHeightProperty().bind(btn_height);
-     	btn_equal.prefHeightProperty().bind(btn_height);
+     	btn_equal.prefHeightProperty().bind(btn_height.multiply(2.1));
+     	btn_sin.prefHeightProperty().bind(btn_height);
+     	btn_cos.prefHeightProperty().bind(btn_height);
+     	btn_tan.prefHeightProperty().bind(btn_height);
+     	btn_sinh.prefHeightProperty().bind(btn_height);
+     	btn_cosh.prefHeightProperty().bind(btn_height);
+     	btn_tanh.prefHeightProperty().bind(btn_height);
+     	btn_fact.prefHeightProperty().bind(btn_height);
+     	btn_mod.prefHeightProperty().bind(btn_height);
+     	btn_PI.prefHeightProperty().bind(btn_height);
      	
      	btn_1.prefHeightProperty().bind(btn_height);
      	btn_2.prefHeightProperty().bind(btn_height);
@@ -151,23 +185,23 @@ public class Main extends Application
      	btn_lg.prefHeightProperty().bind(btn_height);
     }
     
-    private void Design1()
+    private void design1()
     {  	    
     	desgin=1;
     	container.getChildren().clear();
          container.add(lbl_answer,1,1,6,2);
          
          //Add column 1
-         container.add(btn_openBra,1,4);
-         container.add(btn_sqrt,1,5);
+         container.add(btn_sqrt,1,4);
+         container.add(btn_openBra,1,5);
          container.add(btn_7,1,6);
          container.add(btn_4,1,7);
          container.add(btn_1,1,8);
          container.add(btn_0,1,9);
 
          //Add column 2
-         container.add(btn_closeBra,2,4);
-         container.add(btn_square,2,5); 
+         container.add(btn_square,2,4);
+         container.add(btn_closeBra,2,5); 
          container.add(btn_8,2,6);
          container.add(btn_5,2,7);
          container.add(btn_2,2,8);
@@ -175,64 +209,77 @@ public class Main extends Application
 
          //Add column 3
          container.add(btn_clear,3,4);
-         container.add(btn_lg,3,5);
+         container.add(btn_mul,3,5);
          container.add(btn_9,3,6);
          container.add(btn_6,3,7);
          container.add(btn_3,3,8);
-         container.add(btn_equal,3,9);
+         container.add(btn_mod,3,9);
          
          //Add column 4
          container.add(btn_delete,4,4);
-         container.add(btn_log,4,5);
+         container.add(btn_div,4,5);
          container.add(btn_add,4,6);
          container.add(btn_sub,4,7);
-         container.add(btn_mul,4,8);
-         container.add(btn_div,4,9);
+         container.add(btn_equal,4,8,1,2);
          resizeComponents();
+         setStyles();
          if(lbl_answer.getText().isEmpty())
         	 check("Clear");
          else
         	 check("Equal");
     }
     
-    private void Design2()
+    private void design2()
     {  	    
     	 desgin=2;
     	 container.getChildren().clear();
-         container.add(lbl_answer,1,1,6,2);
+         container.add(lbl_answer,1,1,7,3);
          
          //Add row 1
-         container.add(btn_7,1,3);
-         container.add(btn_8,2,3);
-         container.add(btn_9,3,3);
-         container.add(btn_add,4,3);
-         container.add(btn_openBra,5,3);
-         container.add(btn_closeBra,6,3);
+         container.add(btn_clear,1,4);
+         container.add(btn_delete,2,4);
+         container.add(btn_PI,3,4);
+         container.add(btn_openBra,4,4);
+         container.add(btn_closeBra,5,4);
+         container.add(btn_mul,6,4);
+         container.add(btn_div,7,4);
          
          //Add row 2
-         container.add(btn_4,1,4);
-         container.add(btn_5,2,4);
-         container.add(btn_6,3,4);
-         container.add(btn_sub,4,4);
-         container.add(btn_sqrt,5,4);
-         container.add(btn_square,6,4);
+         container.add(btn_log,1,5);
+         container.add(btn_lg,2,5);
+         container.add(btn_fact,3,5);
+         container.add(btn_7,4,5);
+         container.add(btn_8,5,5);
+         container.add(btn_9,6,5);
+         container.add(btn_sub,7,5);
          
          //Add row 3
-         container.add(btn_1,1,5);
-         container.add(btn_2,2,5);
-         container.add(btn_3,3,5);
-         container.add(btn_mul,4,5);
-         container.add(btn_clear,5,5);
-         container.add(btn_delete,6,5);
+         container.add(btn_sqrt,1,6);
+         container.add(btn_square,2,6);
+         container.add(btn_mod,3,6);
+         container.add(btn_4,4,6);
+         container.add(btn_5,5,6);
+         container.add(btn_6,6,6);
+         container.add(btn_add,7,6);
          
          //Add row 4
-         container.add(btn_0,1,6);
-         container.add(btn_dot,2,6);
-         container.add(btn_equal,3,6);
-         container.add(btn_div,4,6);
-         container.add(btn_log,5,6);
-         container.add(btn_lg,6,6);
+         container.add(btn_sin,1,7);
+         container.add(btn_cos,2,7);
+         container.add(btn_tan,3,7);
+         container.add(btn_1,4,7);
+         container.add(btn_2,5,7);
+         container.add(btn_3,6,7);
+         container.add(btn_equal,7,7);
+         
+       //Add row 5
+         container.add(btn_sinh,1,8);
+         container.add(btn_cosh,2,8);
+         container.add(btn_tanh,3,8);
+         container.add(btn_0,4,8,2,1);
+         container.add(btn_dot,6,8);
+         
          resizeComponents();
+         setStyles();
          if(lbl_answer.getText().isEmpty())
         	 check("Clear");
          else
@@ -252,35 +299,51 @@ public class Main extends Application
 			    		   "-fx-border-color: rgb(150, 30, 30);"+
 			    		   "-fx-font: 28pt Serif;");
     	
-    	String style_to_all_button = "-fx-background-radius: "+
+    	String style1_to_button = "-fx-background-radius: "+
     			"0;-fx-base: rgb(46, 46, 46); -fx-font: 18pt Serif;";
     	
+    	String style2_to_button = "-fx-background-radius: "+
+    			"0;-fx-base: rgb(30, 30, 30); -fx-font: 15pt Serif;";
+    	
     	btn_equal.setStyle("-fx-background-radius: 0; -fx-base: #C0392b; -fx-font: 20pt Serif;");
-    	btn_add.setStyle(style_to_all_button);
-     	btn_sub.setStyle(style_to_all_button);
-     	btn_div.setStyle(style_to_all_button);
-     	btn_mul.setStyle(style_to_all_button);
+    	
+    	if(desgin==1)
+    		style2_to_button= style1_to_button;
+    		
+     	btn_PI.setStyle(style2_to_button);
+     	btn_sin.setStyle(style2_to_button);
+     	btn_cos.setStyle(style2_to_button);
+     	btn_tan.setStyle(style2_to_button);
+     	btn_sinh.setStyle(style2_to_button);
+     	btn_cosh.setStyle(style2_to_button);
+     	btn_tanh.setStyle(style2_to_button);
+     	btn_mod.setStyle(style2_to_button);
+     	btn_fact.setStyle(style2_to_button);
+     	btn_clear.setStyle(style2_to_button);
+     	btn_square.setStyle(style2_to_button);
+     	btn_sqrt.setStyle(style2_to_button);
+     	btn_delete.setStyle(style2_to_button);
+     	btn_log.setStyle(style2_to_button);
+     	btn_lg.setStyle(style2_to_button);
      	
-     	btn_clear.setStyle(style_to_all_button);
-     	btn_openBra.setStyle(style_to_all_button);
-     	btn_closeBra.setStyle(style_to_all_button);
-     	btn_square.setStyle(style_to_all_button);
-     	btn_sqrt.setStyle(style_to_all_button);
-     	btn_delete.setStyle(style_to_all_button);
-     	btn_log.setStyle(style_to_all_button);
-     	btn_lg.setStyle(style_to_all_button);
-     	
-     	btn_dot.setStyle(style_to_all_button);
-     	btn_1.setStyle(style_to_all_button);
-     	btn_2.setStyle(style_to_all_button);
-     	btn_3.setStyle(style_to_all_button);
-     	btn_4.setStyle(style_to_all_button);
-     	btn_5.setStyle(style_to_all_button);
-     	btn_6.setStyle(style_to_all_button);
-     	btn_7.setStyle(style_to_all_button);
-     	btn_8.setStyle(style_to_all_button);
-     	btn_9.setStyle(style_to_all_button);
-     	btn_0.setStyle(style_to_all_button);
+
+     	btn_openBra.setStyle(style1_to_button);
+     	btn_closeBra.setStyle(style1_to_button);
+     	btn_add.setStyle(style1_to_button);
+     	btn_sub.setStyle(style1_to_button);
+     	btn_div.setStyle(style1_to_button);
+     	btn_mul.setStyle(style1_to_button);
+     	btn_dot.setStyle(style1_to_button);
+     	btn_1.setStyle(style1_to_button);
+     	btn_2.setStyle(style1_to_button);
+     	btn_3.setStyle(style1_to_button);
+     	btn_4.setStyle(style1_to_button);
+     	btn_5.setStyle(style1_to_button);
+     	btn_6.setStyle(style1_to_button);
+     	btn_7.setStyle(style1_to_button);
+     	btn_8.setStyle(style1_to_button);
+     	btn_9.setStyle(style1_to_button);
+     	btn_0.setStyle(style1_to_button);
     }
     
     private void eventHandler()
@@ -304,6 +367,7 @@ public class Main extends Application
     	btn_sub.setOnAction(e->{check(" - ");});
     	btn_div.setOnAction(e->{check(" / ");});
     	btn_mul.setOnAction(e->{check(" * ");});
+    	btn_mod.setOnAction(e->{check(" % ");});
     	
     	btn_openBra.setOnAction(e->{check(" ( ");});
     	btn_closeBra.setOnAction(e->{check(" ) ");});
@@ -311,6 +375,16 @@ public class Main extends Application
     	btn_sqrt.setOnAction(e->{check(" sqrt( ");});
     	btn_log.setOnAction(e->{check(" log( ");});
     	btn_lg.setOnAction(e->{check(" lg( ");});
+    	
+    	btn_sin.setOnAction(e->{check(" sin( ");});
+    	btn_cos.setOnAction(e->{check(" cos( ");});
+    	btn_tan.setOnAction(e->{check(" tan( ");});
+    	btn_sinh.setOnAction(e->{check(" sinh( ");});
+    	btn_cosh.setOnAction(e->{check(" cosh( ");});
+    	btn_tanh.setOnAction(e->{check(" tanh( ");});
+    	btn_fact.setOnAction(e->{check(" )!");});
+    	btn_PI.setOnAction(e->{check(" PI");});
+    	
     	
     	btn_clear.setOnAction(e->{check("Clear");});
     	btn_delete.setOnAction(e->{delete(lbl_answer.getText());});
@@ -321,9 +395,9 @@ public class Main extends Application
       	    @Override public void changed(ObservableValue<? extends Number> observableValue, Number oldSceneWidth, Number newSceneWidth) {
       	    	if(container.heightProperty().doubleValue()>
       	    	container.widthProperty().doubleValue() )
-      	    		Design1();
+      	    		design1();
       	    	else
-      	    		Design2();
+      	    		design2();
       	    }
       	});
          
@@ -331,9 +405,9 @@ public class Main extends Application
       	    @Override public void changed(ObservableValue<? extends Number> observableValue, Number oldSceneHeight, Number newSceneHeight) {
       	       if(container.heightProperty().doubleValue()<=
       	    		  container.widthProperty().doubleValue() )
-      	    	   Design2();
+      	    	   design2();
       	       else
-      	    	   Design1();
+      	    	   design1();
       	    }
       	});
          
@@ -376,18 +450,22 @@ public class Main extends Application
     
     private void delete(String exp)
     {
-    	//delete anyone word if there is exist (log(, lg(, sqrt(, Error, Infinity )
-    	if(exp.endsWith("sqrt( "))
+    	//delete anyone word if there is( exist (log(, lg(, sqrt(, Error, Infinity,
+    	// sin(, cos(, tan(, sinh(, cosh, tanh( )
+    	if(exp.endsWith("sqrt( ")||exp.endsWith("sinh( ")||exp.endsWith("cosh( ")||exp.endsWith("tanh( "))
     		exp = exp.substring(0,exp.length()-6);
-    	else if(exp.endsWith("log( ")||exp.endsWith("Error"))
+    	else if(exp.endsWith("log( ")||exp.endsWith("Error")||
+    			exp.endsWith("sin( ")||exp.endsWith("cos( ")||exp.endsWith("tan( "))
     				exp = exp.substring(0,exp.length()-5);
     	else if(exp.endsWith("lg( "))
     		exp = exp.substring(0,exp.length()-4);
     	else if(exp.endsWith("Infinity"))
     		exp = exp.substring(0,exp.length()-8);
+    		
     	
-    	//delete  ^2 if it is exist
-    	else if(exp.length()>2&&exp.charAt(exp.length()-2)=='^')
+    	//delete  ^2 or PI or )! if it is exist
+    	else if(exp.length()>2&&(exp.charAt(exp.length()-2)=='^'||
+    			exp.charAt(exp.length()-2)=='P'||exp.charAt(exp.length()-2)==')'))
     		exp = exp.substring(0, exp.length()-3);
     	//delete any operator or brackets
     	else if(exp.length()>2&&exp.charAt(exp.length()-1)==' ')
@@ -397,6 +475,7 @@ public class Main extends Application
     			case '+':	case '-':
     			case '*':	case ')':
     			case '(':	case '/':
+    			case '%':
     			exp = exp.substring(0, exp.length()-2);
     		}
        	}
@@ -431,6 +510,8 @@ public class Main extends Application
 	private void calculate(String exp)
     {
 		double cal = 0;
+		exp = exp.replaceAll("PI", ""+Math.PI);
+		@SuppressWarnings("rawtypes")
 		Stack<Comparable> st = new Stack<Comparable>();
 		st.push('(');
 		try
@@ -463,10 +544,57 @@ public class Main extends Application
 							st.push(Math.log10(evaluateExp(s))/Math.log10(2));
 						}
 					}
+					else if(st.peek().equals('h'))    //cosh or sinh or tanh
+					{
+						st.pop();st.pop();st.pop();
+						if(st.peek().equals('s'))    //sinh
+						{
+							st.pop();
+							st.push(Math.sinh(evaluateExp(s)));	
+						}
+						else if(st.peek().equals('c'))  //cosh
+						{
+							st.pop();
+							st.push(Math.cosh(evaluateExp(s)));	
+						}
+						else if(st.peek().equals('t'))   //tanh
+						{
+							st.pop();
+							st.push(Math.tanh(evaluateExp(s)));	
+						}
+					}
+					else if(st.peek().equals('n'))     //sin or  tan
+					{
+						st.pop();st.pop();
+						if(st.peek().equals('s'))   	//sin
+						{
+							st.pop();
+							st.push(Math.sin(evaluateExp(s)));	
+						}
+						else if(st.peek().equals('t'))   //tan
+						{
+							st.pop();
+							st.push(Math.tan(evaluateExp(s)));	
+						}
+					}
+					else if(st.peek().equals('s'))   // cos
+					{
+						st.pop();st.pop();st.pop();
+						st.push(Math.cos(evaluateExp(s)));
+					}
 					else if(exp.charAt(i+1)=='^')    // ()^2
 					{
 						st.push(Math.pow(evaluateExp(s),2));
 						i+=2;
+					}
+					else if(exp.charAt(i+1)=='!')    // ()!
+					{
+						BigInteger factorial = new BigInteger("1");
+						long last_num = (long) evaluateExp(s);
+						for(long k=1; k<= last_num;k++)
+							factorial=factorial.multiply(new BigInteger(""+k));
+						st.push(factorial);
+						i++;
 					}
 					else
 						st.push(evaluateExp(s)); //( + * - / )
@@ -500,10 +628,15 @@ public class Main extends Application
 		   	double op1=0,op2=0;
 		   	exp = exp.replaceAll("  ", " ");
 		   	contain_operand = exp.contains(" + ") || exp.contains(" - ") ||
-    			exp.contains(" * ") || exp.contains(" / ") ;
+    			exp.contains(" * ") || exp.contains(" / ") ||exp.contains(" % ");
 		   	if(contain_operand)
 		   	{
 			   	String[] op = exp.split(" ");
+			   	if(op[1].equals("-"))
+			   	{
+			   		exp = exp.replace(" ", "");
+			   		return new Double(exp.substring(0));
+			   	}
 			   	//handle the first operation
 			   	op1 = new Double(op[1]);
 			   	last = op[2].charAt(0);
@@ -519,16 +652,19 @@ public class Main extends Application
 			   				case'-':op1 -= op2; break;
 			   				case'*':op1 *= op2; break;
 			   				case'/':op1 /= op2; break;
+			   				case'%':op1 %= op2; break;
 			   			}
 			   			op2 = new Double(op[i+1]);
 			   			last = op[i].charAt(0);
 			   		}
-			   		else if(op[i].charAt(0)=='*' || op[i].charAt(0)=='/')
+			   		else if(op[i].charAt(0)=='*' || op[i].charAt(0)=='/' || op[i].charAt(0)=='%')
 			   		{
 			   			if(op[i].charAt(0) == '*')
 			   				op2 *= new Double(op[i+1]);
-			   			else
+			   			else if(op[i].charAt(0) == '/')
 			   				op2 /= new Double(op[i+1]);
+			   			else 
+			   				op2 %= new Double(op[i+1]);
 			   		}
 			   	}		    	
 			   	//calculate the last operation in priority
@@ -538,6 +674,7 @@ public class Main extends Application
 					case'-':op1 -= op2; break;
 					case'*':op1 *= op2; break;
 					case'/':op1 /= op2; break;
+					case'%':op1 %= op2; break;
 				}		    	
 			   	exp = ""+op1;	
 			   	}
