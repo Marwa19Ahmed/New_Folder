@@ -1,6 +1,5 @@
 package P;
 
-
 import java.math.BigInteger;
 import java.util.Stack;
 import javafx.application.Application;
@@ -9,10 +8,13 @@ import javafx.beans.Observable;
 import javafx.beans.binding.DoubleBinding;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.event.EventHandler;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
 
@@ -37,10 +39,10 @@ public class Main extends Application
        design1(); //Default Design
        setStyles();
        eventHandler();
-       
+
        Scene scene = new Scene(container, 350, 550);
        primaryStage.setFullScreenExitHint("");
-       //primaryStage.setFullScreen(true);
+       primaryStage.setFullScreen(true);
        primaryStage.centerOnScreen();
        primaryStage.setTitle("3MG Calculator");
        primaryStage.setScene(scene);
@@ -390,6 +392,18 @@ public class Main extends Application
     	btn_delete.setOnAction(e->{delete(lbl_answer.getText());});
     	btn_equal.setOnAction(e->{calculate(lbl_answer.getText());});
     	
+    	
+    	// close on escape button (back button in android)
+    	container.setOnKeyPressed(new EventHandler<KeyEvent>() {
+
+			@Override
+			public void handle(KeyEvent event) {
+				if(event.getCode() == KeyCode.ESCAPE)
+					System.exit(0);
+			}
+    		
+		});
+    	
     	//if the size changed, the design will change
     	 container.widthProperty().addListener(new ChangeListener<Number>() {
       	    @Override public void changed(ObservableValue<? extends Number> observableValue, Number oldSceneWidth, Number newSceneWidth) {
@@ -681,6 +695,5 @@ public class Main extends Application
 		     }
     		return new Double(exp);
     	}
-
 }
    
