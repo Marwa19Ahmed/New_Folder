@@ -7,6 +7,7 @@ import javafx.beans.Observable;
 import javafx.beans.binding.DoubleBinding;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -47,7 +48,7 @@ public class Main extends Application
        
        btnscene1=new Button("Swap to go to calcuator");
        btnscene1.setStyle("-fx-background-radius: 0; -fx-base: #C0392b; -fx-font: 20pt Serif; opacity:30%");
-       btnscene1.setOnAction(e->{});
+       btnscene1.setOnAction(e-> ButtonClicked(e));
 
        scene1 = new Scene(btnscene1, 200, 100);
         scene2 = new Scene(container, 350, 550);
@@ -818,5 +819,22 @@ public static double factorial(double n)
 	else
 		return n * factorial(n-1);
 }
+//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+public void ButtonClicked(ActionEvent e)
+{
+    if (e.getSource()==btnscene1)
+    {
+    	thestage.setFullScreen(true);
+    	thestage.centerOnScreen();
+        thestage.setScene(scene2);
+    }
+    else
+    {
+    	thestage.setFullScreen(true);
+    	thestage.centerOnScreen();
+        thestage.setScene(scene1);
+    }
+}           
+
 }
    
