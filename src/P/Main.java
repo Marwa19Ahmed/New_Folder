@@ -1,6 +1,5 @@
 package P;
 
-import java.math.BigInteger;
 import java.util.Stack;
 import javafx.application.Application;
 import javafx.beans.InvalidationListener;
@@ -373,7 +372,7 @@ public class Main extends Application
     	
     	btn_openBra.setOnAction(e->{check(" ( ");});
     	btn_closeBra.setOnAction(e->{check(" ) ");});
-    	btn_square.setOnAction(e->{check(" )^2");});
+    	btn_square.setOnAction(e->{check(" ^2");});
     	btn_sqrt.setOnAction(e->{check(" sqrt( ");});
     	btn_log.setOnAction(e->{check(" log( ");});
     	btn_lg.setOnAction(e->{check(" lg( ");});
@@ -384,7 +383,7 @@ public class Main extends Application
     	btn_sinh.setOnAction(e->{check(" sinh( ");});
     	btn_cosh.setOnAction(e->{check(" cosh( ");});
     	btn_tanh.setOnAction(e->{check(" tanh( ");});
-    	btn_fact.setOnAction(e->{check(" )!");});
+    	btn_fact.setOnAction(e->{check(" !");});
     	btn_PI.setOnAction(e->{check(" PI");});
     	
     	
@@ -525,6 +524,7 @@ public class Main extends Application
     {
 		//calculate
 		double cal = 0;
+		exp = exp.replaceAll("PI", ""+Math.PI);
 		try
 		{	
 			
@@ -569,12 +569,22 @@ public static double evaluateExpression(String expression) {
 			while (!operatorStack.isEmpty() && (operatorStack.peek() == '%'
 					||operatorStack.peek() == '+' || operatorStack.peek() == '-'
 					|| operatorStack.peek() == '*' || operatorStack.peek() == '/')) {
-				processAnOperator(operandStack, operatorStack);
+          			processAnOperator(operandStack, operatorStack);
 			}
 
 			// Push the + or - operator into the operator stack
 			operatorStack.push(token.charAt(0));
 		} 
+		//........................................................................
+
+		else if (token.charAt(0) == '!') {
+			// Process all *, / in the top of the operator stack
+			while (!operatorStack.isEmpty() && (operatorStack.peek() == '!')) {
+				processAnOperator(operandStack, operatorStack);
+			}
+			operatorStack.push(token.charAt(0));
+		}
+		//........................................................................
 		
 		else if (token.charAt(0) == '^') {
 			// Process all *, / in the top of the operator stack
@@ -583,7 +593,7 @@ public static double evaluateExpression(String expression) {
 			}operatorStack.push(token.charAt(0));
 			}
 		
-		else if (token.charAt(0) == '*' || 
+	else if    (token.charAt(0)== '*' || 
 				token.charAt(0) == '/'||
 				token.charAt(0) == '%'||
 				token.charAt(0) == '^') {
@@ -598,21 +608,32 @@ public static double evaluateExpression(String expression) {
 		
 				//to push sin&sqrt
 		else if (token.trim().charAt(0) == 's') {
-			if(token.trim().charAt(1) == 'i')
+			if(token.trim().charAt(3) == '(')
 			operatorStack.push('i'); // Push 'sin' to stack
-			else
+			else if(token.trim().charAt(3) == 'h')
+				operatorStack.push('w'); //for push sinh
+			else if(token.trim().charAt(1) == 'q')
 				operatorStack.push('q'); // Push 'sqrt' to stack
-
 				
 		}
+		
          //to push cos
 		else if (token.trim().charAt(0) == 'c') {
+			if(token.trim().charAt(3) == '(')
 			operatorStack.push('c'); // Push 'cos' to stack
+			else if(token.trim().charAt(3) == 'h')
+				operatorStack.push('k'); //push cosh
+				
 		}
+		
 
 		 //to push tan
 		else if (token.trim().charAt(0) == 't') {
-			operatorStack.push('t'); // Push 'cos' to stack
+			if(token.trim().charAt(3) == '(')
+			    operatorStack.push('t'); // Push 'cos' to stack
+			else if(token.trim().charAt(3) == 'h')
+				operatorStack.push('u');  //for tanh 
+				
 		}
 
 		// Push the * or / operator into the operator stack
@@ -632,7 +653,10 @@ public static double evaluateExpression(String expression) {
 													// '('
 
 			while ( operatorStack.peek() != '(' 
-					&& operatorStack.peek() != 'i'&& operatorStack.peek() != 't'&& operatorStack.peek() != 'c'&& operatorStack.peek() != 'q') {
+					&& operatorStack.peek() != 'i'&& operatorStack.peek() != 't'
+					&& operatorStack.peek() != 'c'&& operatorStack.peek() != 'q'
+					&& operatorStack.peek() != 'w'&& operatorStack.peek() != 'u'
+					&& operatorStack.peek() != 'k') {
 				processAnOperator(operandStack, operatorStack);
 			}
 			if (operatorStack.peek() == '(')
@@ -644,6 +668,21 @@ public static double evaluateExpression(String expression) {
 			}
 			else if (operatorStack.peek() == 'c') {
 				operandStack.push(Math.cos(operandStack.pop()*(Math.PI/180)));
+				operatorStack.pop(); // Pop the 'cos' symbol from the stack
+
+			}
+			else if (operatorStack.peek() == 'w') {
+				operandStack.push(Math.sinh(operandStack.pop()*(Math.PI/180)));
+				operatorStack.pop(); // Pop the 'cos' symbol from the stack
+
+			}
+			else if (operatorStack.peek() == 'k') {
+				operandStack.push(Math.cosh(operandStack.pop()*(Math.PI/180)));
+				operatorStack.pop(); // Pop the 'cos' symbol from the stack
+
+			}
+			else if (operatorStack.peek() == 'u') {
+				operandStack.push(Math.tanh(operandStack.pop()*(Math.PI/180)));
 				operatorStack.pop(); // Pop the 'cos' symbol from the stack
 
 			}
@@ -692,45 +731,81 @@ public static void processAnOperator(Stack<Double> operandStack, Stack<Character
 		operandStack.push(op2 / op1);
 	else if (op == '^')
 		operandStack.push(Math.pow(op2, op1));
+	else if (op == '!'){
+		operandStack.push(op2);
+		operandStack.push(factorial(op1));
 }
-
+}
 public static String insertBlanks(String s) {
 	String result = "";
 	for (int i=0; i < s.length(); i++) {
 		
-	if (s.charAt(i) == '(' || s.charAt(i) == ')' || s.charAt(i) == '+'|| s.charAt(i) == '-'
-			|| s.charAt(i) == '*' || s.charAt(i) == '/'|| s.charAt(i) == '%'|| s.charAt(i) == '^')
+	if (s.charAt(i) == '(' || s.charAt(i) == ')' || s.charAt(i) == '+'|| 
+	    s.charAt(i) == '-' || s.charAt(i) == '*' || s.charAt(i) == '/'||
+	    s.charAt(i) == '%' || s.charAt(i) == '^'|| s.charAt(i) == '!')
 			result += " " + s.charAt(i) + " ";
 	 
 		//to split cos
 		else if(s.charAt(i)=='c')
 		{
+			if(s.charAt(i+3)=='('){
 			result += " " + s.charAt(i) + s.charAt(i + 1) + s.charAt(i + 2) + s.charAt(i + 3) + " ";
 			i +=3;
+			}
+			else if(s.charAt(i+3)=='h'){
+				result += " " + s.charAt(i) + s.charAt(i + 1) + s.charAt(i + 2) + s.charAt(i + 3) + 
+						s.charAt(i+4)+" ";
+				i +=4;
+			}
 		}
 		//to split  tan
 		else if(s.charAt(i)=='t')
 		{
+			if(s.charAt(i+3)=='('){
 			result += " " + s.charAt(i) + s.charAt(i + 1) + s.charAt(i + 2) + s.charAt(i + 3) + " ";
 			i +=3;
+			}
+			else if(s.charAt(i+3)=='h'){
+				result += " " + s.charAt(i) + s.charAt(i + 1) + s.charAt(i + 2) + s.charAt(i + 3) + 
+						s.charAt(i+4)+" ";
+				i +=4;
+			}
 		}
 		//to split sin & sqrt
 		else if(s.charAt(i)=='s')
 		{
-			if(s.charAt(i+1)=='i')
+			if(s.charAt(i+3)=='(')
 			{
 				result += " " + s.charAt(i) + s.charAt(i + 1) + s.charAt(i + 2) + s.charAt(i + 3) + " ";
 			    i +=3;
 	     	}
-			if(s.charAt(i+1)=='q'){
+			else if(s.charAt(i+1)=='q'){
 				result += " " + s.charAt(i) + s.charAt(i + 1) + s.charAt(i + 2) + s.charAt(i + 3) +s.charAt(i+4)+ " ";
 			    i +=4;
-			}}
+			}
+			//...............................................................................
+			else if(s.charAt(i+3)=='h'){
+				result += " " + s.charAt(i) + s.charAt(i + 1) + s.charAt(i + 2) + s.charAt(i + 3) +s.charAt(i+4)+" ";
+			    i +=4;
+			}
+			
+		}
+			//...............................................................................
+
+		
 		else
-			result += s.charAt(i);}
+			result += s.charAt(i);
+	}
 	//System.out.println(result);
 	return result;
 }
-
+//.......................................................................................
+public static double factorial(double n)
+{
+	if (n == 0)
+		return 1;
+	else
+		return n * factorial(n-1);
+}
 }
    
