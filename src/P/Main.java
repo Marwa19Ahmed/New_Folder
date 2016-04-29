@@ -521,105 +521,21 @@ public class Main extends Application
 		
 	}
 
-	private void calculate(String exp)
+    private void calculate(String exp)
     {
+		//calculate
 		double cal = 0;
-		exp = exp.replaceAll("PI", ""+Math.PI);
-		@SuppressWarnings("rawtypes")
-		Stack<Comparable> st = new Stack<Comparable>();
-		st.push('(');
 		try
-		{
-			for(int i=0;i<exp.length();i++)
-			{
-				if(exp.charAt(i)==')') 
-				{
-					String s = ")";
-					while(!st.peek().equals('('))
-						s = st.pop() + s;
-					s = st.pop() + s;
-					if(st.peek().equals('t')) 			//sqrt()
-					{
-						while(!st.peek().equals('s')) 
-							st.pop();st.pop();
-						st.push(Math.sqrt(evaluateExp(s)));						
-					}
-					else if(st.peek().equals('g'))    //log() or lg()
-					{
-						st.pop();
-						if(st.peek().equals('o'))    // log()
-						{
-							st.pop();st.pop();
-							st.push(Math.log10(evaluateExp(s)));	
-						}
-						else    					//lg()
-						{
-							st.pop();
-							st.push(Math.log10(evaluateExp(s))/Math.log10(2));
-						}
-					}
-					else if(st.peek().equals('h'))    //cosh or sinh or tanh
-					{
-						st.pop();st.pop();st.pop();
-						if(st.peek().equals('s'))    //sinh
-						{
-							st.pop();
-							st.push(Math.sinh(evaluateExp(s)));	
-						}
-						else if(st.peek().equals('c'))  //cosh
-						{
-							st.pop();
-							st.push(Math.cosh(evaluateExp(s)));	
-						}
-						else if(st.peek().equals('t'))   //tanh
-						{
-							st.pop();
-							st.push(Math.tanh(evaluateExp(s)));	
-						}
-					}
-					else if(st.peek().equals('n'))     //sin or  tan
-					{
-						st.pop();st.pop();
-						if(st.peek().equals('s'))   	//sin
-						{
-							st.pop();
-							st.push(Math.sin(evaluateExp(s)));	
-						}
-						else if(st.peek().equals('t'))   //tan
-						{
-							st.pop();
-							st.push(Math.tan(evaluateExp(s)));	
-						}
-					}
-					else if(st.peek().equals('s'))   // cos
-					{
-						st.pop();st.pop();st.pop();
-						st.push(Math.cos(evaluateExp(s)));
-					}
-					else if(exp.charAt(i+1)=='^')    // ()^2
-					{
-						st.push(Math.pow(evaluateExp(s),2));
-						i+=2;
-					}
-					else if(exp.charAt(i+1)=='!')    // ()!
-					{
-						BigInteger factorial = new BigInteger("1");
-						long last_num = (long) evaluateExp(s);
-						for(long k=1; k<= last_num;k++)
-							factorial=factorial.multiply(new BigInteger(""+k));
-						st.push(factorial);
-						i++;
-					}
-					else
-						st.push(evaluateExp(s)); //( + * - / )
-				}
-				else
-					st.push(exp.charAt(i));
-			}
-		String s = " ) ";
-		while(!st.isEmpty())
-			s = st.pop() + s;
-	    cal = evaluateExp(s);
+		{	
+			
+	    	if(new Double(cal).isInfinite())
+	    		cal = Double.POSITIVE_INFINITY;
+	    	else
+	    	{
+	    		//to handle -
+	    			exp="0"+exp;
+	    		cal = evaluateExpression(exp);
+	    	}
 		}
 		catch(Exception e)
 		{
@@ -628,72 +544,193 @@ public class Main extends Application
     	if(new Double(cal).isInfinite())
     		{check(" Infinity");}
     	else
-    		{lbl_answer.setText(" "+cal);check("Equal");}
+    		{cal = evaluateExpression(exp);lbl_answer.setText(" "+cal);check("Equal");}
     }
-	
-    private double evaluateExp(String exp)
-    {
-    	boolean contain_operand = true;
-    	exp = exp.replace("(", "");
-	   	exp = exp.replace(")", "");
-    	while(contain_operand)
-    	{
-		 	char last;
-		   	double op1=0,op2=0;
-		   	exp = exp.replaceAll("  ", " ");
-		   	contain_operand = exp.contains(" + ") || exp.contains(" - ") ||
-    			exp.contains(" * ") || exp.contains(" / ") ||exp.contains(" % ");
-		   	if(contain_operand)
-		   	{
-			   	String[] op = exp.split(" ");
-			   	if(op[1].equals("-"))
-			   	{
-			   		exp = exp.replace(" ", "");
-			   		return new Double(exp.substring(0));
-			   	}
-			   	//handle the first operation
-			   	op1 = new Double(op[1]);
-			   	last = op[2].charAt(0);
-			   	op2 = new Double(op[3]);
-			   	//handle and calculate the next operation
-			   	for(int i = 4;i<op.length;i++)
-			   	{
-			   		if(op[i].charAt(0)=='+' || op[i].charAt(0)=='-')
-			   		{
-			 			switch(last)
-			   			{
-			   				case'+':op1 += op2; break;
-			   				case'-':op1 -= op2; break;
-			   				case'*':op1 *= op2; break;
-			   				case'/':op1 /= op2; break;
-			   				case'%':op1 %= op2; break;
-			   			}
-			   			op2 = new Double(op[i+1]);
-			   			last = op[i].charAt(0);
-			   		}
-			   		else if(op[i].charAt(0)=='*' || op[i].charAt(0)=='/' || op[i].charAt(0)=='%')
-			   		{
-			   			if(op[i].charAt(0) == '*')
-			   				op2 *= new Double(op[i+1]);
-			   			else if(op[i].charAt(0) == '/')
-			   				op2 /= new Double(op[i+1]);
-			   			else 
-			   				op2 %= new Double(op[i+1]);
-			   		}
-			   	}		    	
-			   	//calculate the last operation in priority
-			   	switch(last)
-				{
-					case'+':op1 += op2; break;
-					case'-':op1 -= op2; break;
-					case'*':op1 *= op2; break;
-					case'/':op1 /= op2; break;
-					case'%':op1 %= op2; break;
-				}		    	
-			   	exp = ""+op1;	
-			   	}
-		     }
-    		return new Double(exp);
-    	}
+/** Evaluate an expression */
+public static double evaluateExpression(String expression) {
+	// Create operandStack to store operands
+	Stack<Double> operandStack = new Stack<>();
+
+	// Create operatorStack to store operators
+	Stack<Character> operatorStack = new Stack<>();
+
+	// Insert blanks around (, ), +, -, /,%,^ and *
+	expression = insertBlanks(expression);
+
+	// Extract operands and operators
+	String[] tokens = expression.split(" ");
+
+	// Phase 1: Scan tokens
+	for (String token : tokens) {
+		if (token.length() == 0) // Blank space
+			continue; // Back to the while loop to extract the next token
+		else if (token.charAt(0) == '+' || token.charAt(0) == '-') {
+			// Process all +, -, *, / in the top of the operator stack
+			while (!operatorStack.isEmpty() && (operatorStack.peek() == '%'
+					||operatorStack.peek() == '+' || operatorStack.peek() == '-'
+					|| operatorStack.peek() == '*' || operatorStack.peek() == '/')) {
+				processAnOperator(operandStack, operatorStack);
+			}
+
+			// Push the + or - operator into the operator stack
+			operatorStack.push(token.charAt(0));
+		} 
+		
+		else if (token.charAt(0) == '^') {
+			// Process all *, / in the top of the operator stack
+			while (!operatorStack.isEmpty() && (operatorStack.peek() == '^')) {
+				processAnOperator(operandStack, operatorStack);
+			}operatorStack.push(token.charAt(0));
+			}
+		
+		else if (token.charAt(0) == '*' || 
+				token.charAt(0) == '/'||
+				token.charAt(0) == '%'||
+				token.charAt(0) == '^') {
+			// Process all *, / in the top of the operator stack
+			while (!operatorStack.isEmpty() && (operatorStack.peek() == '*'||operatorStack.peek() == '^'
+					||operatorStack.peek() == '/'|| operatorStack.peek() == '%')) {
+				processAnOperator(operandStack, operatorStack);
+			}
+		//to push log & ln	
+			operatorStack.push(token.charAt(0));
+		} 
+		
+				//to push sin&sqrt
+		else if (token.trim().charAt(0) == 's') {
+			if(token.trim().charAt(1) == 'i')
+			operatorStack.push('i'); // Push 'sin' to stack
+			else
+				operatorStack.push('q'); // Push 'sqrt' to stack
+
+				
+		}
+         //to push cos
+		else if (token.trim().charAt(0) == 'c') {
+			operatorStack.push('c'); // Push 'cos' to stack
+		}
+
+		 //to push tan
+		else if (token.trim().charAt(0) == 't') {
+			operatorStack.push('t'); // Push 'cos' to stack
+		}
+
+		// Push the * or / operator into the operator stack
+		else if (token.trim().charAt(0) == '(') {
+			
+			operatorStack.push('('); // Push '(' to stack
+		}
+
+		/*
+		 * else if (token.trim().charAt(0) == 'x') {
+		 * operatorStack.push('x'); // Push '(' to stack }
+		 */
+
+		else if (token.trim().charAt(0) == ')') { // Process all the
+													// operators in the
+													// stack until seeing
+													// '('
+
+			while ( operatorStack.peek() != '(' 
+					&& operatorStack.peek() != 'i'&& operatorStack.peek() != 't'&& operatorStack.peek() != 'c'&& operatorStack.peek() != 'q') {
+				processAnOperator(operandStack, operatorStack);
+			}
+			if (operatorStack.peek() == '(')
+				operatorStack.pop(); // Pop the '(' symbol from the stack
+						else if (operatorStack.peek() == 'i') {
+				operandStack.push(Math.sin(operandStack.pop()*((int)Math.PI/180)));
+				operatorStack.pop(); // Pop the 'sin' symbol from the stack
+
+			}
+			else if (operatorStack.peek() == 'c') {
+				operandStack.push(Math.cos(operandStack.pop()*(Math.PI/180)));
+				operatorStack.pop(); // Pop the 'cos' symbol from the stack
+
+			}
+			else if (operatorStack.peek() == 't') {
+				operandStack.push(Math.tan(operandStack.pop()*(Math.PI/180)));//degree
+				operatorStack.pop(); // Pop the 'tan' symbol from the stack
+
+			}
+			else if (operatorStack.peek() == 'q') {
+				operandStack.push(Math.sqrt(operandStack.pop()));
+				operatorStack.pop(); // Pop the 'sqrt' symbol from the stack
+
+			}
+			
+		} else { // An operand scanned
+			// Push an operand to the stack
+			operandStack.push(new Double(token));
+		}
+	}
+
+	// Phase 2: Process all the remaining operators in the stack
+	while (!operatorStack.isEmpty()) {
+		processAnOperator(operandStack, operatorStack);
+	}
+
+	// Return the result
+	return operandStack.pop();
+}
+/**
+ * Process one operator: Take an operator from operatorStack and apply it on
+ * the operands in the operandStack
+ */
+public static void processAnOperator(Stack<Double> operandStack, Stack<Character> operatorStack) {
+	char op = operatorStack.pop();
+	double op1 = operandStack.pop();
+	double op2 = operandStack.pop();
+	if (op == '+')
+		operandStack.push(op2 + op1);
+	else if (op == '-')
+		operandStack.push(op2 - op1);
+	else if (op == '*')
+		operandStack.push(op2 * op1);
+	else if (op == '%')
+		operandStack.push(op2 % op1);
+	else if (op == '/')
+		operandStack.push(op2 / op1);
+	else if (op == '^')
+		operandStack.push(Math.pow(op2, op1));
+}
+
+public static String insertBlanks(String s) {
+	String result = "";
+	for (int i=0; i < s.length(); i++) {
+		
+	if (s.charAt(i) == '(' || s.charAt(i) == ')' || s.charAt(i) == '+'|| s.charAt(i) == '-'
+			|| s.charAt(i) == '*' || s.charAt(i) == '/'|| s.charAt(i) == '%'|| s.charAt(i) == '^')
+			result += " " + s.charAt(i) + " ";
+	 
+		//to split cos
+		else if(s.charAt(i)=='c')
+		{
+			result += " " + s.charAt(i) + s.charAt(i + 1) + s.charAt(i + 2) + s.charAt(i + 3) + " ";
+			i +=3;
+		}
+		//to split  tan
+		else if(s.charAt(i)=='t')
+		{
+			result += " " + s.charAt(i) + s.charAt(i + 1) + s.charAt(i + 2) + s.charAt(i + 3) + " ";
+			i +=3;
+		}
+		//to split sin & sqrt
+		else if(s.charAt(i)=='s')
+		{
+			if(s.charAt(i+1)=='i')
+			{
+				result += " " + s.charAt(i) + s.charAt(i + 1) + s.charAt(i + 2) + s.charAt(i + 3) + " ";
+			    i +=3;
+	     	}
+			if(s.charAt(i+1)=='q'){
+				result += " " + s.charAt(i) + s.charAt(i + 1) + s.charAt(i + 2) + s.charAt(i + 3) +s.charAt(i+4)+ " ";
+			    i +=4;
+			}}
+		else
+			result += s.charAt(i);}
+	//System.out.println(result);
+	return result;
+}
+
 }
    
