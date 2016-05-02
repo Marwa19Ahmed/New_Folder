@@ -23,40 +23,29 @@ public class Main extends Application
 	private short desgin = 1;
 	private GridPane container;
 	private Label lbl_answer;
-	private Button  btnscene1,btn_add, btn_sub, btn_div, btn_mul, btn_clear,
+	private Button btn_add, btn_sub, btn_div, btn_mul, btn_clear,
 		    btn_dot, btn_openBra, btn_closeBra, btn_square,
    		    btn_sqrt, btn_delete, btn_equal, btn_PI,
    		    btn_1, btn_2, btn_3, btn_4, btn_5, btn_6,
    		    btn_7, btn_8, btn_9, btn_0, btn_lg, btn_log,
    		    btn_mod, btn_sin, btn_cos, btn_tan,
    		    btn_sinh, btn_cosh, btn_tanh, btn_fact;
-	private  Scene scene1;
- 	private  Scene scene2;
- 	private  Stage thestage;
     
     @Override
     public void start(Stage primaryStage)
     {
-    	 thestage=primaryStage;
-     	
        initiateComponents(); 	 
        resizeComponents();
        design1(); //Default Design
        setStyles();
        eventHandler();
-
        
-       btnscene1=new Button("Swap to go to calcuator");
-       btnscene1.setStyle("-fx-background-radius: 0; -fx-base: #C0392b; -fx-font: 20pt Serif; opacity:30%");
-       btnscene1.setOnAction(e-> ButtonClicked(e));
-
-       scene1 = new Scene(btnscene1, 200, 100);
-        scene2 = new Scene(container, 350, 550);
+       Scene scene= new Scene(container, 350, 550);
        primaryStage.setFullScreenExitHint("");
        primaryStage.setFullScreen(true);
        primaryStage.centerOnScreen();
        primaryStage.setTitle("3MG Calculator");
-       primaryStage.setScene(scene1);
+       primaryStage.setScene(scene);
        primaryStage.show();
     }
    
@@ -76,7 +65,7 @@ public class Main extends Application
     	btn_dot = new Button(".");
     	btn_openBra = new Button("(");
     	btn_closeBra = new Button(")");
-    	btn_square = new Button("^2");
+    	btn_square = new Button("^");
     	btn_sqrt = new Button("S");
     	btn_delete = new Button("C");
     	btn_equal = new Button("=");
@@ -384,7 +373,7 @@ public class Main extends Application
     	
     	btn_openBra.setOnAction(e->{check(" ( ");});
     	btn_closeBra.setOnAction(e->{check(" ) ");});
-    	btn_square.setOnAction(e->{check(" ^2");});
+    	btn_square.setOnAction(e->{check(" ^");});
     	btn_sqrt.setOnAction(e->{check(" sqrt( ");});
     	btn_log.setOnAction(e->{check(" log( ");});
     	btn_lg.setOnAction(e->{check(" lg( ");});
@@ -489,7 +478,7 @@ public class Main extends Application
     		
     	
     	//delete  ^2 or PI or )! if it is exist
-    	else if(exp.length()>2&&(exp.charAt(exp.length()-2)=='^'||
+    	else if(exp.length()>2&&(
     			exp.charAt(exp.length()-2)=='P'||exp.charAt(exp.length()-2)==')'))
     		exp = exp.substring(0, exp.length()-3);
     	//delete any operator or brackets
@@ -819,22 +808,7 @@ public static double factorial(double n)
 	else
 		return n * factorial(n-1);
 }
-//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-public void ButtonClicked(ActionEvent e)
-{
-    if (e.getSource()==btnscene1)
-    {
-    	thestage.setFullScreen(true);
-    	thestage.centerOnScreen();
-        thestage.setScene(scene2);
-    }
-    else
-    {
-    	thestage.setFullScreen(true);
-    	thestage.centerOnScreen();
-        thestage.setScene(scene1);
-    }
-}           
+ 
 
 }
    
