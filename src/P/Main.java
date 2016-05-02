@@ -398,8 +398,30 @@ public class Main extends Application
 
 			@Override
 			public void handle(KeyEvent event) {
-				if(event.getCode() == KeyCode.ESCAPE)
-					System.exit(0);
+				switch(event.getCode()){
+				case DIGIT0        : {check("0"); break;}
+				case DIGIT1        : {check("1"); break;}
+				case DIGIT2        : {check("2"); break;}
+				case DIGIT3        : {check("3"); break;}
+				case DIGIT4        : {check("4"); break;}
+				case DIGIT5        : {check("5"); break;}
+				case DIGIT6        : {check("6"); break;}
+				case DIGIT7        : {check("7"); break;}
+				case DIGIT8        : {check("8"); break;}
+				case DIGIT9        : {check("9"); break;}
+				case ADD           : {check(" +"); break;}
+				case DIVIDE        : {check(" /"); break;}
+				case MULTIPLY      : {check(" *"); break;}   
+				case MINUS         : {check(" -"); break;}
+				case ENTER         : {calculate(lbl_answer.getText()); break;}
+				case EQUALS        : {calculate(lbl_answer.getText()); break;}
+				case BACK_SPACE    : {delete(lbl_answer.getText()); break;}
+				case DELETE        : {check("Clear"); break;}
+				default:
+					break;
+				}
+				if(event.getCode() == KeyCode.ESCAPE)	
+						System.exit(0);	
 			}
     		
 		});
