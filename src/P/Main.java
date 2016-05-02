@@ -7,7 +7,6 @@ import javafx.beans.Observable;
 import javafx.beans.binding.DoubleBinding;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
-import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -29,7 +28,7 @@ public class Main extends Application
    		    btn_1, btn_2, btn_3, btn_4, btn_5, btn_6,
    		    btn_7, btn_8, btn_9, btn_0, btn_lg, btn_log,
    		    btn_mod, btn_sin, btn_cos, btn_tan,
-   		    btn_sinh, btn_cosh, btn_tanh, btn_fact;
+   		    btn_sinh, btn_cosh, btn_tanh, btn_fact,degree_radian;
     
     @Override
     public void start(Stage primaryStage)
@@ -90,6 +89,7 @@ public class Main extends Application
     	btn_tanh = new Button("Tanh");
     	btn_fact = new Button("!");
     	btn_PI = new Button("PI");
+    	degree_radian = new Button("Deg");
     	lbl_answer = new Label();
     }
   
@@ -102,14 +102,13 @@ public class Main extends Application
     		lbl_answer.prefHeightProperty().bind(container.heightProperty().divide(4));
     		btn_height = container.heightProperty().divide(9);
     		btn_width = container.widthProperty().divide(3);
-    		btn_0.prefWidthProperty().bind(btn_width.divide(1.45));
     	}
     	else
     	{
     		lbl_answer.prefHeightProperty().bind(container.heightProperty().multiply(8));
     		btn_height = container.heightProperty().divide(8);
     		btn_width = container.widthProperty().divide(7).subtract(7);
-    		btn_0.prefWidthProperty().bind(btn_width.multiply(2.05));
+
     	}
     	
     	lbl_answer.prefWidthProperty().bind(container.widthProperty().subtract(15)); 
@@ -137,7 +136,9 @@ public class Main extends Application
      	btn_mod.prefWidthProperty().bind(btn_width);
      	btn_PI.prefWidthProperty().bind(btn_width);
      	btn_equal.prefWidthProperty().bind(btn_width);
+        degree_radian.prefWidthProperty().bind(btn_width);
      	
+		btn_0.prefWidthProperty().bind(btn_width);
      	btn_1.prefWidthProperty().bind(btn_width);
      	btn_2.prefWidthProperty().bind(btn_width);
      	btn_3.prefWidthProperty().bind(btn_width);
@@ -173,6 +174,7 @@ public class Main extends Application
      	btn_mod.prefHeightProperty().bind(btn_height);
      	btn_PI.prefHeightProperty().bind(btn_height);
      	
+     	degree_radian.prefHeightProperty().bind(btn_height);     	
      	btn_1.prefHeightProperty().bind(btn_height);
      	btn_2.prefHeightProperty().bind(btn_height);
      	btn_3.prefHeightProperty().bind(btn_height);
@@ -240,7 +242,7 @@ public class Main extends Application
          //Add row 1
          container.add(btn_clear,1,4);
          container.add(btn_delete,2,4);
-         container.add(btn_PI,3,4);
+         container.add(degree_radian,3,4);
          container.add(btn_openBra,4,4);
          container.add(btn_closeBra,5,4);
          container.add(btn_mul,6,4);
@@ -277,7 +279,8 @@ public class Main extends Application
          container.add(btn_sinh,1,8);
          container.add(btn_cosh,2,8);
          container.add(btn_tanh,3,8);
-         container.add(btn_0,4,8,2,1);
+         container.add(btn_0,4,8);
+         container.add(btn_PI,5,8);
          container.add(btn_dot,6,8);
          
          resizeComponents();
@@ -327,7 +330,8 @@ public class Main extends Application
      	btn_delete.setStyle(style2_to_button);
      	btn_log.setStyle(style2_to_button);
      	btn_lg.setStyle(style2_to_button);
-     	
+     	degree_radian.setStyle(style2_to_button);
+
 
      	btn_openBra.setStyle(style1_to_button);
      	btn_closeBra.setStyle(style1_to_button);
@@ -421,7 +425,8 @@ public class Main extends Application
 					break;
 				}
 				if(event.getCode() == KeyCode.ESCAPE)	
-						System.exit(0);	
+						//System.exit(0);
+					design1();
 			}
     		
 		});
