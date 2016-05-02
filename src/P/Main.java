@@ -26,7 +26,7 @@ public class Main extends Application
 		    btn_dot, btn_openBra, btn_closeBra, btn_square,
    		    btn_sqrt, btn_delete, btn_equal, btn_PI,
    		    btn_1, btn_2, btn_3, btn_4, btn_5, btn_6,
-   		    btn_7, btn_8, btn_9, btn_0, btn_lg, btn_log,
+   		    btn_7, btn_8, btn_9, btn_0, btn_ln, btn_log,
    		    btn_mod, btn_sin, btn_cos, btn_tan,
    		    btn_sinh, btn_cosh, btn_tanh, btn_fact,degree_radian;
     
@@ -79,7 +79,7 @@ public class Main extends Application
     	btn_9 = new Button("9");
     	btn_0 = new Button("0");
     	btn_log = new Button("log");
-    	btn_lg = new Button("lg");
+    	btn_ln = new Button("ln");
     	btn_mod = new Button("%");
     	btn_sin = new Button("Sin");
     	btn_cos = new Button("Cos");
@@ -148,7 +148,7 @@ public class Main extends Application
      	btn_7.prefWidthProperty().bind(btn_width);
      	btn_8.prefWidthProperty().bind(btn_width);
      	btn_9.prefWidthProperty().bind(btn_width);
-     	btn_lg.prefWidthProperty().bind(btn_width);
+     	btn_ln.prefWidthProperty().bind(btn_width);
      	btn_log.prefWidthProperty().bind(btn_width);
      	
      	//reset height to all button on changing in container's height
@@ -186,7 +186,7 @@ public class Main extends Application
      	btn_9.prefHeightProperty().bind(btn_height);
      	btn_0.prefHeightProperty().bind(btn_height);
      	btn_log.prefHeightProperty().bind(btn_height);
-     	btn_lg.prefHeightProperty().bind(btn_height);
+     	btn_ln.prefHeightProperty().bind(btn_height);
     }
     
     private void design1()
@@ -250,7 +250,7 @@ public class Main extends Application
          
          //Add row 2
          container.add(btn_log,1,5);
-         container.add(btn_lg,2,5);
+         container.add(btn_ln,2,5);
          container.add(btn_fact,3,5);
          container.add(btn_7,4,5);
          container.add(btn_8,5,5);
@@ -329,7 +329,7 @@ public class Main extends Application
      	btn_sqrt.setStyle(style2_to_button);
      	btn_delete.setStyle(style2_to_button);
      	btn_log.setStyle(style2_to_button);
-     	btn_lg.setStyle(style2_to_button);
+     	btn_ln.setStyle(style2_to_button);
      	degree_radian.setStyle(style2_to_button);
 
 
@@ -380,7 +380,7 @@ public class Main extends Application
     	btn_square.setOnAction(e->{check(" ^");});
     	btn_sqrt.setOnAction(e->{check(" sqrt( ");});
     	btn_log.setOnAction(e->{check(" log( ");});
-    	btn_lg.setOnAction(e->{check(" lg( ");});
+    	btn_ln.setOnAction(e->{check(" ln( ");});
     	
     	btn_sin.setOnAction(e->{check(" sin( ");});
     	btn_cos.setOnAction(e->{check(" cos( ");});
@@ -403,24 +403,25 @@ public class Main extends Application
 			@Override
 			public void handle(KeyEvent event) {
 				switch(event.getCode()){
-				case DIGIT0        : {check("0"); break;}
-				case DIGIT1        : {check("1"); break;}
-				case DIGIT2        : {check("2"); break;}
-				case DIGIT3        : {check("3"); break;}
-				case DIGIT4        : {check("4"); break;}
-				case DIGIT5        : {check("5"); break;}
-				case DIGIT6        : {check("6"); break;}
-				case DIGIT7        : {check("7"); break;}
-				case DIGIT8        : {check("8"); break;}
-				case DIGIT9        : {check("9"); break;}
-				case ADD           : {check(" +"); break;}
-				case DIVIDE        : {check(" /"); break;}
-				case MULTIPLY      : {check(" *"); break;}   
-				case MINUS         : {check(" -"); break;}
-				case ENTER         : {calculate(lbl_answer.getText()); break;}
-				case EQUALS        : {calculate(lbl_answer.getText()); break;}
-				case BACK_SPACE    : {delete(lbl_answer.getText()); break;}
-				case DELETE        : {check("Clear"); break;}
+				case DIGIT0              : {check("0"); break;}
+				case DIGIT1        		 : {check("1"); break;}
+				case DIGIT2        		 : {check("2"); break;}
+				case DIGIT3        		 : {check("3"); break;}
+				case DIGIT4              : {check("4"); break;}
+				case DIGIT5              : {check("5"); break;}
+				case DIGIT6              : {check("6"); break;}
+				case DIGIT7              : {check("7"); break;}
+				case DIGIT8              : {check("8"); break;}
+				case DIGIT9              : {check("9"); break;}
+				case ADD                 : {check(" +"); break;}
+				case DIVIDE              : {check(" /"); break;}
+				case MULTIPLY            : {check(" *"); break;}   
+				case MINUS               : {check(" -"); break;}
+
+				case ENTER               : {calculate(lbl_answer.getText()); break;}
+				case EQUALS              : {calculate(lbl_answer.getText()); break;}
+				case BACK_SPACE          : {delete(lbl_answer.getText()); break;}
+				case DELETE              : {check("Clear"); break;}
 				default:
 					break;
 				}
@@ -498,7 +499,7 @@ public class Main extends Application
     	else if(exp.endsWith("log( ")||exp.endsWith("Error")||
     			exp.endsWith("sin( ")||exp.endsWith("cos( ")||exp.endsWith("tan( "))
     				exp = exp.substring(0,exp.length()-5);
-    	else if(exp.endsWith("lg( "))
+    	else if(exp.endsWith("ln( "))
     		exp = exp.substring(0,exp.length()-4);
     	else if(exp.endsWith("Infinity"))
     		exp = exp.substring(0,exp.length()-8);
@@ -621,7 +622,7 @@ public static double evaluateExpression(String expression) {
 			}operatorStack.push(token.charAt(0));
 			}
 		
-	else if    (token.charAt(0)== '*' || 
+	   else if    (token.charAt(0)== '*' || 
 				token.charAt(0) == '/'||
 				token.charAt(0) == '%'||
 				token.charAt(0) == '^') {
@@ -630,12 +631,19 @@ public static double evaluateExpression(String expression) {
 					||operatorStack.peek() == '/'|| operatorStack.peek() == '%')) {
 				processAnOperator(operandStack, operatorStack);
 			}
-		//to push log & ln	
 			operatorStack.push(token.charAt(0));
-		} 
+		 } 
 		
+		//to push log & ln	
+	   else if (token.trim().charAt(0) == 'l') {
+		 if(token.trim().charAt(1)=='o')
+			 operatorStack.push('g');   //for push log
+		 else if(token.trim().charAt(1)=='n')
+			 operatorStack.push('n'); //for push ln
+	  }
+			
 				//to push sin&sqrt
-		else if (token.trim().charAt(0) == 's') {
+		  else if (token.trim().charAt(0) == 's') {
 			if(token.trim().charAt(3) == '(')
 			operatorStack.push('i'); // Push 'sin' to stack
 			else if(token.trim().charAt(3) == 'h')
@@ -684,7 +692,8 @@ public static double evaluateExpression(String expression) {
 					&& operatorStack.peek() != 'i'&& operatorStack.peek() != 't'
 					&& operatorStack.peek() != 'c'&& operatorStack.peek() != 'q'
 					&& operatorStack.peek() != 'w'&& operatorStack.peek() != 'u'
-					&& operatorStack.peek() != 'k') {
+					&& operatorStack.peek() != 'k'&& operatorStack.peek() != 'g'
+					&& operatorStack.peek() != 'n') {
 				processAnOperator(operandStack, operatorStack);
 			}
 			if (operatorStack.peek() == '(')
@@ -724,6 +733,17 @@ public static double evaluateExpression(String expression) {
 				operatorStack.pop(); // Pop the 'sqrt' symbol from the stack
 
 			}
+			else if (operatorStack.peek() == 'g') {
+				operandStack.push(Math.log10(operandStack.pop()));
+				operatorStack.pop(); // Pop the 'sqrt' symbol from the stack
+
+			}
+			else if (operatorStack.peek() == 'n') {
+				operandStack.push(Math.log(operandStack.pop()));
+				operatorStack.pop(); // Pop the 'sqrt' symbol from the stack
+
+			}
+			
 			
 		} else { // An operand scanned
 			// Push an operand to the stack
@@ -816,10 +836,18 @@ public static String insertBlanks(String s) {
 				result += " " + s.charAt(i) + s.charAt(i + 1) + s.charAt(i + 2) + s.charAt(i + 3) +s.charAt(i+4)+" ";
 			    i +=4;
 			}
-			
 		}
 			//...............................................................................
-
+		else if(s.charAt(i)=='l'){
+			if(s.charAt(i+1)=='o'){
+				result += " " + s.charAt(i) + s.charAt(i + 1) + s.charAt(i + 2) + s.charAt(i + 3) + " ";
+				i +=3;
+			}
+			else if(s.charAt(i+1)=='n'){
+				result += " " + s.charAt(i) + s.charAt(i + 1) + s.charAt(i + 2) +" ";
+				i +=2;
+			}		
+		}
 		
 		else
 			result += s.charAt(i);
@@ -835,7 +863,6 @@ public static double factorial(double n)
 	else
 		return n * factorial(n-1);
 }
- 
 
 }
    
