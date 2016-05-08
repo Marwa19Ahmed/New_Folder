@@ -25,6 +25,7 @@ public class Main extends Application
 {
     private final static double precision=1000000000;
 	private short desgin = 1;
+	private static int count=2;
 	private GridPane container;
 	private Line line_top;
 	private Label lbl_answer ;
@@ -35,6 +36,7 @@ public class Main extends Application
    		    btn_7, btn_8, btn_9, btn_0, btn_ln, btn_log,
    		    btn_mod, btn_sin, btn_cos, btn_tan,
    		    btn_sinh, btn_cosh, btn_tanh, btn_fact,degree_radian;
+	
     
     @Override
     public void start(Stage primaryStage)
@@ -441,6 +443,7 @@ public class Main extends Application
     	btn_clear.setOnAction(e->{check("Clear");});
     	btn_delete.setOnAction(e->{delete(lbl_answer.getText());});
     	btn_equal.setOnAction(e->{calculate(lbl_answer.getText());});
+    	degree_radian.setOnAction(e->{++count; if(count%2!=0) degree_radian.setText("Rad"); else degree_radian.setText("Deg") ;});
     	
     	
     	// close on escape button (back button in android)
@@ -750,30 +753,48 @@ public class Main extends Application
 				if (operatorStack.peek() == '(')
 					operatorStack.pop(); // Pop the '(' symbol from the stack
 							else if (operatorStack.peek() == 'i') {
+								if(count%2!=0)
+									operandStack.push(Math.sin(operandStack.pop()));
+								else
 								operandStack.push(((double) Math.round(Math.sin(operandStack.pop()*(Math.PI/180))*precision)/precision));					operatorStack.pop(); // Pop the 'sin' symbol from the stack
-	
+								operatorStack.pop(); // Pop the 'sin' symbol from the stack
 				}
 				else if (operatorStack.peek() == 'c') {
+					if(count%2!=0)
+						operandStack.push(Math.cos(operandStack.pop()));
+					else
 					operandStack.push(((double) Math.round(Math.cos(operandStack.pop()*(Math.PI/180))*precision)/precision));
 					operatorStack.pop(); // Pop the 'cos' symbol from the stack
 	
 				}
 				else if (operatorStack.peek() == 'w') {
+					if(count%2!=0)
+						operandStack.push(Math.sinh(operandStack.pop()));
+					else
 					operandStack.push(((double) Math.round(Math.sinh(operandStack.pop()*(Math.PI/180))*precision)/precision));
-					operatorStack.pop(); // Pop the 'cos' symbol from the stack
+					operatorStack.pop(); // Pop the 'sinh' symbol from the stack
 	
 				}
 				else if (operatorStack.peek() == 'k') {
+					if(count%2!=0)
+						operandStack.push(Math.cosh(operandStack.pop()));
+					else
 					operandStack.push(((double) Math.round(Math.cosh(operandStack.pop()*(Math.PI/180))*precision)/precision));
-					operatorStack.pop(); // Pop the 'cos' symbol from the stack
+					operatorStack.pop(); // Pop the 'cosh' symbol from the stack
 	
 				}
 				else if (operatorStack.peek() == 'u') {
+					if(count%2!=0)
+						operandStack.push(Math.tanh(operandStack.pop()));
+					else
 					operandStack.push(((double) Math.round(Math.tanh(operandStack.pop()*(Math.PI/180))*precision)/precision));
-					operatorStack.pop(); // Pop the 'cos' symbol from the stack
+					operatorStack.pop(); // Pop the 'tanh' symbol from the stack
 	
 				}
 				else if (operatorStack.peek() == 't') {
+					if(count%2!=0)
+						operandStack.push(Math.tan(operandStack.pop()));
+					else
 					operandStack.push(((double) Math.round(Math.tan(operandStack.pop()*(Math.PI/180))*precision)/precision));//degree
 					operatorStack.pop(); // Pop the 'tan' symbol from the stack
 	
