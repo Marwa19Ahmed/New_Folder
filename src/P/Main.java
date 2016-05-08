@@ -23,6 +23,7 @@ import javafx.stage.Stage;
 
 public class Main extends Application 
 {
+    private final static double precision=1000000000;
 	private short desgin = 1;
 	private GridPane container;
 	private Line line_top;
@@ -749,32 +750,31 @@ public class Main extends Application
 				if (operatorStack.peek() == '(')
 					operatorStack.pop(); // Pop the '(' symbol from the stack
 							else if (operatorStack.peek() == 'i') {
-					operandStack.push(Math.sin(operandStack.pop()*((int)Math.PI/180)));
-					operatorStack.pop(); // Pop the 'sin' symbol from the stack
+								operandStack.push(((double) Math.round(Math.sin(operandStack.pop()*(Math.PI/180))*precision)/precision));					operatorStack.pop(); // Pop the 'sin' symbol from the stack
 	
 				}
 				else if (operatorStack.peek() == 'c') {
-					operandStack.push(Math.cos(operandStack.pop()*(Math.PI/180)));
+					operandStack.push(((double) Math.round(Math.cos(operandStack.pop()*(Math.PI/180))*precision)/precision));
 					operatorStack.pop(); // Pop the 'cos' symbol from the stack
 	
 				}
 				else if (operatorStack.peek() == 'w') {
-					operandStack.push(Math.sinh(operandStack.pop()*(Math.PI/180)));
+					operandStack.push(((double) Math.round(Math.sinh(operandStack.pop()*(Math.PI/180))*precision)/precision));
 					operatorStack.pop(); // Pop the 'cos' symbol from the stack
 	
 				}
 				else if (operatorStack.peek() == 'k') {
-					operandStack.push(Math.cosh(operandStack.pop()*(Math.PI/180)));
+					operandStack.push(((double) Math.round(Math.cosh(operandStack.pop()*(Math.PI/180))*precision)/precision));
 					operatorStack.pop(); // Pop the 'cos' symbol from the stack
 	
 				}
 				else if (operatorStack.peek() == 'u') {
-					operandStack.push(Math.tanh(operandStack.pop()*(Math.PI/180)));
+					operandStack.push(((double) Math.round(Math.tanh(operandStack.pop()*(Math.PI/180))*precision)/precision));
 					operatorStack.pop(); // Pop the 'cos' symbol from the stack
 	
 				}
 				else if (operatorStack.peek() == 't') {
-					operandStack.push(Math.tan(operandStack.pop()*(Math.PI/180)));//degree
+					operandStack.push(((double) Math.round(Math.tan(operandStack.pop()*(Math.PI/180))*precision)/precision));//degree
 					operatorStack.pop(); // Pop the 'tan' symbol from the stack
 	
 				}
