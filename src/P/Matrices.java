@@ -18,7 +18,7 @@ public class Matrices extends Simple
 		static int zero=0;
 		static int operandCount=0;
 	//....................................................................................
-	
+	//
 	protected void initiateComponents()
     {
 		super.initiateComponents();

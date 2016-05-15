@@ -290,7 +290,7 @@ public class Simple
     	btn_delete.setOnAction(e->{delete(lbl_answer.getText());});
     	btn_equal.setOnAction(e->{calculate(lbl_answer.getText());});
     	
-    	
+    	//
     	// close on escape button (back button in android)
     	container.setOnKeyPressed(new EventHandler<KeyEvent>() {
 

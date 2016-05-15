@@ -40,7 +40,7 @@ public class Main extends Application
 			}
     		
 		});
-       
+       //
        Scene scene= new Scene(s.container, 350, 550);
        primaryStage.setFullScreenExitHint("");
        //primaryStage.setFullScreen(true);

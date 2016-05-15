@@ -36,7 +36,7 @@ public class Scientific extends Simple
     {
     	DoubleBinding btn_height;
     	DoubleBinding btn_width;
-    	
+    	//
     		lbl_answer.prefHeightProperty().bind(container.heightProperty().multiply(8));
     		btn_height = container.heightProperty().divide(8);
     		btn_width = container.widthProperty().divide(7).subtract(7); 
