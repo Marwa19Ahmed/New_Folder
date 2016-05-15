@@ -9,13 +9,22 @@ public class Matrices extends Simple
 {
 	protected Button btn_Comma, btn_openBracket,
 		btn_Semicolon,btn_closeBracket;
+	//...........................................................variables used in calculation
+		static int rows = 0;
+		static int cols = 0;
+		static boolean endOfRow = false;
+		static double[][] mat1 ;
+		static double[][] temp ;
+		static int zero=0;
+		static int operandCount=0;
+	//....................................................................................
 	
 	protected void initiateComponents()
     {
 		super.initiateComponents();
     	btn_Comma = new Button(",");
-    	btn_openBracket = new Button("[");
-    	btn_closeBracket = new Button("]");
+    	btn_openBracket = new Button("{");
+    	btn_closeBracket = new Button("}");
     	btn_Semicolon = new Button(";");
     }
   
@@ -132,6 +141,7 @@ public class Matrices extends Simple
     }
     
     protected void setStyles()
+
     {
         super.setStyles();
     	String style2_to_button = "-fx-background-radius: "+
@@ -149,7 +159,75 @@ public class Matrices extends Simple
      	btn_closeBracket.setTextFill(color);
      	btn_Semicolon.setTextFill(color);
     }
-    
+ // .................................................................
+    /*push elements in matrix
+     * */
+	void getMat(String[] mat){
+		int count=0;
+    for(int i=0;i<rows;i++){
+    	for(int j=0;j<cols;j++){
+    		count++;
+    		if(zero==0)
+    		{
+    		temp[i][j]=Double.parseDouble(mat[count]);
+    		}
+    		else{
+        	mat1[i][j]=Double.parseDouble(mat[count]);
+    	}
+    		}
+	}
+    count=0;
+}
+	//..............................................................
+	static void addMat() {
+		for (int i = 0; i < mat1.length; i++)
+			for (int j = 0; j < mat1[0].length; j++) {
+				temp[i][j]= temp[i][j] + mat1[i][j];
+			}
+	}
+
+	// ...................................................
+	static void subMat() {
+		for (int i = 0; i < mat1.length; i++)
+			for (int j = 0; j < mat1[0].length; j++) {
+				temp[i][j] = temp[i][j] - mat1[i][j];
+			}
+	}
+
+	// ...................................................
+	static double getMatElement(double[][] mat1, double[][] mat2, int row, int col) {
+		double element = 0.0;
+		for (int i = 0; i < mat1[0].length; i++) {
+			element += (mat1[row][i] * mat2[i][col]);
+		}
+		return element;
+	}
+
+	// ...................................................
+	static void mulMat() {
+		double[][] mulMat = new double[temp.length][mat1[0].length];
+		for (int i = 0; i < temp.length; i++)
+			for (int j = 0; j < mat1[0].length; j++) {
+				mulMat[i][j] = getMatElement(temp, mat1, i, j);
+			}
+		temp=new double[temp.length][mat1[0].length];
+		System.arraycopy( mulMat, 0, temp, 0, mulMat.length );
+		for (int i = 0; i < temp.length; i++)
+			for (int j = 0; j <temp[0].length; j++) {
+			}
+	}
+
+	// ...................................................
+	/*static void divMat(double[][] mat1, double[][] mat2) {
+		double[][] mulMat = new double[mat1.length][mat2[0].length];
+		for (int i = 0; i < mat1.length; i++)
+			for (int j = 0; j < mat2[0].length; j++) {
+				mulMat[i][j] = getMatElement(mat1, mat2, i, j);
+				System.out.print(mulMat[i][j] + "    ");
+			}
+	}*/
+	// ...................................................
+
     protected void eventHandler()
     {
        	lbl_answer.setText(" ");
@@ -157,9 +235,11 @@ public class Matrices extends Simple
        	//check the lbl_answer if it is valid or not before writing 
         super.eventHandler();
     	btn_Comma.setOnAction(e->{check(",");});
-    	btn_openBracket.setOnAction(e->{check(" [ ");});
+    	btn_openBracket.setOnAction(e->{check(" { ");});
     	btn_Semicolon.setOnAction(e->{check(" ; ");});
-    	btn_closeBracket.setOnAction(e->{check(" ] ");});   	
+    	btn_closeBracket.setOnAction(e->{check(" } ");}); 
+    	btn_equal.setOnAction(e->{calculate(lbl_answer.getText());});
+
     }
     
     protected void delete(String exp)
@@ -195,7 +275,82 @@ public class Matrices extends Simple
 
     protected void calculate(String exp)
     {
-    	
-    }
-}
+    	//..................................to isolate operators
+    	String op = "";
+    	for (int i = 0; i < exp.length(); i++) {
+			if (exp.charAt(i) == '*' || exp.charAt(i) == '/' || exp.charAt(i) == '+' || exp.charAt(i) == '-') {
+				op += (exp.charAt(i));
+			}
+		}
+    	//..................................to isolate operands (matricise) 
+		String[] mats = exp.split("[*/+-]");    	
+    	//..................................to get number of rows and columns in each (matrix) 
 
+		for (int i = 0; i<mats.length; i++) {
+	    	//..................................to get number of rows and columns in each (matrix) 		
+			for(int j=0;j<mats[i].length();j++){
+			if (mats[i].charAt(j) == ',') {
+				if (endOfRow == false) {
+					cols++;
+				}
+			}
+
+			if (mats[i].charAt(j) == ';') {
+				if (endOfRow == false) {
+					endOfRow = true;
+					cols++;
+				}
+				rows++;
+			}
+			
+		}
+	       //......................................................................................... 		
+			if(i==0){
+				temp=new double[rows][cols];
+				String[] elements=mats[i].split("[;,{}]");
+		        getMat(elements);
+			}
+		        
+				else {
+					if(zero==0)
+						zero=1;
+					mat1=new double[rows][cols];
+					System.out.println(rows+" two "+cols+"mat= "+mats[i]);
+					
+					String[] elements=mats[i].split("[;,{}]");
+					//for (int k = 0; k <elements.length; k++) {
+					//		System.out.println(elements[k]);
+					
+			        getMat(elements);
+			        switch(op.charAt(operandCount)){
+			        //case '/':operandCount++; divMat(temp,mat1);break;
+			        case '*':operandCount++; mulMat();break;
+			        case '+':operandCount++; addMat();break;
+			        case '-':operandCount++; subMat();break;
+			        }
+			        }	        		
+					
+			
+				rows=0;
+				cols=0;
+				endOfRow=false;
+
+			}
+		String calc="{";
+		for(int i=0;i<temp.length;i++){
+			for(int j=0;j<temp[i].length;j++)
+			{
+				calc+=temp[i][j];
+				if(j==temp[i].length-1)
+					continue;
+				calc+=",";
+			}
+			calc+=";";
+		}
+		calc+="}";
+			
+   	lbl_answer.setText(" "+calc);check("Equal");}
+     
+}
+    
+    
