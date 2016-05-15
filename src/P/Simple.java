@@ -18,6 +18,8 @@ import javafx.scene.shape.Line;
 
 public class Simple 
 {
+	protected double ans = 0 ;
+	protected static int desgin = 0;
 	protected GridPane container = new GridPane();
 	protected Line line_top;
 	protected Label lbl_answer,lbl_notelabel ;
@@ -25,11 +27,11 @@ public class Simple
 		    btn_dot, btn_openBra, btn_closeBra, btn_square,
    		    btn_sqrt, btn_delete, btn_equal, btn_mod,
    		    btn_1, btn_2, btn_3, btn_4, btn_5, btn_6,
-   		    btn_7, btn_8, btn_9, btn_0;
+   		    btn_7, btn_8, btn_9, btn_0, btn_ans;
 	
 	protected void initiateComponents()
     {
-    	
+    	desgin = 1;
     	line_top = new Line(0,0,0,0);
     	btn_add = new Button("+");
     	btn_sub = new Button("-");
@@ -53,6 +55,7 @@ public class Simple
     	btn_8 = new Button("8");
     	btn_9 = new Button("9");
     	btn_0 = new Button("0");
+    	btn_ans = new Button("ans");
     	btn_mod = new Button("%");
     	lbl_answer = new Label();
     	lbl_notelabel = new Label("Rotate the phone");
@@ -82,8 +85,9 @@ public class Simple
      	btn_delete.prefWidthProperty().bind(btn_width);
      	btn_mod.prefWidthProperty().bind(btn_width);
      	btn_equal.prefWidthProperty().bind(btn_width);
+     	btn_ans.prefWidthProperty().bind(btn_width);
      	
-		btn_0.prefWidthProperty().bind(btn_width.multiply(2).add(container.getVgap()));
+		btn_0.prefWidthProperty().bind(btn_width);
      	btn_1.prefWidthProperty().bind(btn_width);
      	btn_2.prefWidthProperty().bind(btn_width);
      	btn_3.prefWidthProperty().bind(btn_width);
@@ -108,6 +112,7 @@ public class Simple
      	btn_delete.prefHeightProperty().bind(btn_height);
      	btn_equal.prefHeightProperty().bind(btn_height);
      	btn_mod.prefHeightProperty().bind(btn_height);
+     	btn_ans.prefHeightProperty().bind(btn_height);
     	
      	btn_1.prefHeightProperty().bind(btn_height);
      	btn_2.prefHeightProperty().bind(btn_height);
@@ -132,7 +137,7 @@ public class Simple
          container.add(btn_7,1,6);
          container.add(btn_4,1,7);
          container.add(btn_1,1,8);
-         container.add(btn_0,1,9,2,1);
+         container.add(btn_0,1,9);
 
          //Add column 2
          container.add(btn_square,2,4);
@@ -140,6 +145,7 @@ public class Simple
          container.add(btn_8,2,6);
          container.add(btn_5,2,7);
          container.add(btn_2,2,8);
+         container.add(btn_dot,2,9);
 
          //Add column 3
          container.add(btn_clear,3,4);
@@ -147,7 +153,7 @@ public class Simple
          container.add(btn_9,3,6);
          container.add(btn_6,3,7);
          container.add(btn_3,3,8);
-         container.add(btn_dot,3,9);
+         container.add(btn_ans,3,9);
          
          //Add column 4
          container.add(btn_delete,4,4);
@@ -207,6 +213,7 @@ public class Simple
      	btn_div.setStyle(style2_to_button);
      	btn_mul.setStyle(style2_to_button);
      	btn_dot.setStyle(style1_to_button);
+     	btn_ans.setStyle(style1_to_button);
      	btn_1.setStyle(style1_to_button);
      	btn_2.setStyle(style1_to_button);
      	btn_3.setStyle(style1_to_button);
@@ -233,6 +240,7 @@ public class Simple
      	btn_div.setTextFill(color);
      	btn_mul.setTextFill(color);
      	btn_dot.setTextFill(color);
+     	btn_ans.setTextFill(color);
      	btn_1.setTextFill(color);
      	btn_2.setTextFill(color);
      	btn_3.setTextFill(color);
@@ -263,6 +271,8 @@ public class Simple
 	   	btn_8.setOnAction(e->{check("8");});
 	   	btn_9.setOnAction(e->{check("9");});
 	   	btn_dot.setOnAction(e->{check(".");});
+	   	btn_ans.setOnAction(e->{lbl_answer.setText(" "+ans);});
+	   	
 	   	
 	   	btn_add.setOnAction(e->{check(" + ");});
     	btn_sub.setOnAction(e->{check(" - ");});
@@ -309,12 +319,19 @@ public class Simple
 				default:
 					break;
 				}
+			}
+    		
+		});
+    	container.setOnKeyPressed(new EventHandler<KeyEvent>() {
+
+			@Override
+			public void handle(KeyEvent event) {
+				
 				if(event.getCode() == KeyCode.ESCAPE)	
 						System.exit(0);
 			}
     		
 		});
-    	
     	
     	
     	//if the size changed, the design will change
@@ -458,6 +475,11 @@ public class Simple
     	if(new Double(cal).isInfinite())
     		{check(" Infinity");}
     	else
-    		{cal = Expression_Calculation.evaluateExpression(exp);lbl_answer.setText(" "+cal);check("Equal");}
+    		{
+    		cal = Expression_Calculation.evaluateExpression(exp);
+    		ans = cal;
+    		lbl_answer.setText(" "+cal);
+    		check("Equal");
+    		}
     }
 }

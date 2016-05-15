@@ -12,10 +12,11 @@ import javafx.stage.Stage;
 
 public class Main extends Application 
 {
-	private Simple s = new Simple();
-	private Button btn_Scientific,btn_Simple,
+	protected Simple s = new Simple();
+	protected Button btn_Scientific,btn_Simple,
 		btn_Programmer,btn_Matrices,btn_Equation;
-    @Override
+    
+	@Override
     public void start(Stage primaryStage)
     {
         s.initiateComponents();
@@ -49,7 +50,7 @@ public class Main extends Application
        primaryStage.show();
     }
     
-    private void welcomePage()
+    protected void welcomePage()
 	{
 		s.container.getChildren().clear();
 		btn_Simple = new Button("Simple");

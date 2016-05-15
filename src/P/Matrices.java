@@ -13,6 +13,7 @@ public class Matrices extends Simple
 	protected void initiateComponents()
     {
 		super.initiateComponents();
+		desgin = 4;
     	btn_Comma = new Button(",");
     	btn_openBracket = new Button("[");
     	btn_closeBracket = new Button("]");
@@ -93,7 +94,7 @@ public class Matrices extends Simple
          container.add(btn_7,1,6);
          container.add(btn_4,1,7);
          container.add(btn_1,1,8);
-         container.add(btn_0,1,9,3,1);
+         container.add(btn_0,1,9,2,1);
 
          //Add column 2 
          container.add(btn_closeBracket,2,4);

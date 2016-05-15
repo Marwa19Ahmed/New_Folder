@@ -17,6 +17,7 @@ public class Scientific extends Simple
 	protected void initiateComponents()
     {
     	super.initiateComponents();
+    	desgin = 3;
     	btn_log = new Button("log");
     	btn_ln = new Button("ln");
     	btn_mod = new Button("%");
@@ -46,6 +47,7 @@ public class Scientific extends Simple
             
             //reset width to all button on changing in container's width
             btn_add.prefWidthProperty().bind(btn_width);
+            btn_ans.prefWidthProperty().bind(btn_width);
          	btn_sub.prefWidthProperty().bind(btn_width);
          	btn_div.prefWidthProperty().bind(btn_width);
          	btn_mul.prefWidthProperty().bind(btn_width);
@@ -69,7 +71,7 @@ public class Scientific extends Simple
          	btn_equal.prefWidthProperty().bind(btn_width);
             degree_radian.prefWidthProperty().bind(btn_width);
          	
-    		btn_0.prefWidthProperty().bind(btn_width.multiply(2).add(container.getVgap()));
+    		btn_0.prefWidthProperty().bind(btn_width);
          	btn_1.prefWidthProperty().bind(btn_width);
          	btn_2.prefWidthProperty().bind(btn_width);
          	btn_3.prefWidthProperty().bind(btn_width);
@@ -84,6 +86,7 @@ public class Scientific extends Simple
          	
          	//reset height to all button on changing in container's height
          	btn_add.prefHeightProperty().bind(btn_height);
+         	btn_ans.prefHeightProperty().bind(btn_height);
          	btn_sub.prefHeightProperty().bind(btn_height);
          	btn_div.prefHeightProperty().bind(btn_height);
          	btn_mul.prefHeightProperty().bind(btn_height);
@@ -167,8 +170,9 @@ public class Scientific extends Simple
          container.add(btn_sinh,1,8);
          container.add(btn_cosh,2,8);
          container.add(btn_tanh,3,8);
-         container.add(btn_0,4,8,2,1);
-         container.add(btn_dot,6,8);
+         container.add(btn_0,4,8);
+         container.add(btn_dot,5,8);
+         container.add(btn_ans,6,8);
          container.add(btn_equal,7,8);
          
          resizeComponents();
@@ -319,7 +323,7 @@ public class Scientific extends Simple
     	if(new Double(cal).isInfinite())
     		{check(" Infinity");}
     	else
-    		{cal = Expression_Calculation.evaluateExpression(exp);lbl_answer.setText(" "+cal);check("Equal");}
+    		{cal = Expression_Calculation.evaluateExpression(exp);ans = cal; lbl_answer.setText(" "+cal);check("Equal");}
     }
 
 }

@@ -7,14 +7,17 @@ import javafx.scene.paint.Paint;
 
 public class Programmer extends Simple
 {
-	protected Button btn_inBaseX, btn_toBaseX,
+	protected Button btn_hex, btn_oct,btn_bin, btn_dec,
 		btn_A, btn_B, btn_C, btn_D, btn_E, btn_F;
 	
 	protected void initiateComponents()
     {
 		super.initiateComponents();
-    	btn_inBaseX = new Button("inBaseX");
-    	btn_toBaseX = new Button("toBaseX");
+		desgin = 2;
+    	btn_hex = new Button("HEX");
+    	btn_oct = new Button("OCT");
+    	btn_bin = new Button("BIN");
+    	btn_dec = new Button("DEC");
     	btn_A = new Button("A");
     	btn_B = new Button("B");
     	btn_C = new Button("C");
@@ -40,10 +43,13 @@ public class Programmer extends Simple
      	btn_mul.prefWidthProperty().bind(btn_width);
      	btn_clear.prefWidthProperty().bind(btn_width);
      	btn_dot.prefWidthProperty().bind(btn_width);
-     	btn_inBaseX.prefWidthProperty().bind(btn_width.multiply(2).add(container.getVgap()));
-     	btn_toBaseX.prefWidthProperty().bind(btn_width.multiply(2).add(container.getVgap()));
+     	btn_oct.prefWidthProperty().bind(btn_width);
+     	btn_hex.prefWidthProperty().bind(btn_width);
+     	btn_dec.prefWidthProperty().bind(btn_width);
+     	btn_bin.prefWidthProperty().bind(btn_width);
      	btn_delete.prefWidthProperty().bind(btn_width);
      	btn_mod.prefWidthProperty().bind(btn_width);
+     	btn_ans.prefWidthProperty().bind(btn_width);
      	btn_equal.prefWidthProperty().bind(btn_width);
      	
 		btn_0.prefWidthProperty().bind(btn_width.multiply(3).add(container.getVgap()*2));
@@ -69,9 +75,12 @@ public class Programmer extends Simple
      	btn_div.prefHeightProperty().bind(btn_height);
      	btn_mul.prefHeightProperty().bind(btn_height);
      	btn_clear.prefHeightProperty().bind(btn_height);
+     	btn_ans.prefHeightProperty().bind(btn_height);
      	btn_dot.prefHeightProperty().bind(btn_height);
-     	btn_inBaseX.prefHeightProperty().bind(btn_height);
-     	btn_toBaseX.prefHeightProperty().bind(btn_height);
+     	btn_oct.prefHeightProperty().bind(btn_height);
+     	btn_bin.prefHeightProperty().bind(btn_height);
+     	btn_dec.prefHeightProperty().bind(btn_height);
+     	btn_hex.prefHeightProperty().bind(btn_height);
      	btn_delete.prefHeightProperty().bind(btn_height);
      	btn_equal.prefHeightProperty().bind(btn_height);
      	btn_mod.prefHeightProperty().bind(btn_height);
@@ -109,14 +118,16 @@ public class Programmer extends Simple
 
          
          //Add column 
-         container.add(btn_toBaseX,2,4,2,1);
-         container.add(btn_inBaseX,2,5,2,1);
+         container.add(btn_hex,2,4);
+         container.add(btn_oct,2,5);
          container.add(btn_7,2,6);
          container.add(btn_4,2,7);
          container.add(btn_1,2,8);
-         container.add(btn_0,2,9,3,1);
+         container.add(btn_0,2,9,2,1);
 
          //Add column 2 
+         container.add(btn_bin,3,4);
+         container.add(btn_dec,3,5);
          container.add(btn_8,3,6);
          container.add(btn_5,3,7);
          container.add(btn_2,3,8);
@@ -127,6 +138,7 @@ public class Programmer extends Simple
          container.add(btn_9,4,6);
          container.add(btn_6,4,7);
          container.add(btn_3,4,8);
+         container.add(btn_ans,4,9);
          
          //Add column 4
          container.add(btn_delete,5,4);
@@ -153,10 +165,12 @@ public class Programmer extends Simple
     {
         super.setStyles();
     	String style2_to_button = "-fx-background-radius: "+
-    			"0;-fx-background-color: rgb(40, 40, 40); -fx-font: 15pt Serif;";
+    			"0;-fx-background-color: rgb(40, 40, 40); -fx-font: 13pt Serif;";
     	
-     	btn_toBaseX.setStyle(style2_to_button);
-     	btn_inBaseX.setStyle(style2_to_button);
+     	btn_oct.setStyle(style2_to_button);
+     	btn_hex.setStyle(style2_to_button);
+     	btn_dec.setStyle(style2_to_button);
+     	btn_bin.setStyle(style2_to_button);
      	btn_A.setStyle(style2_to_button);
      	btn_B.setStyle(style2_to_button);
      	btn_C.setStyle(style2_to_button);
@@ -166,8 +180,10 @@ public class Programmer extends Simple
      	
      	Paint color = (Paint) Color.WHITE;
      	
-     	btn_toBaseX.setTextFill(color);
-     	btn_inBaseX.setTextFill(color);
+     	btn_oct.setTextFill(color);
+     	btn_bin.setTextFill(color);
+     	btn_dec.setTextFill(color);
+     	btn_hex.setTextFill(color);
      	btn_A.setTextFill(color);
      	btn_B.setTextFill(color);
      	btn_C.setTextFill(color);
@@ -182,8 +198,10 @@ public class Programmer extends Simple
        	
        	//check the lbl_answer if it is valid or not before writing 
         super.eventHandler();
-    	btn_inBaseX.setOnAction(e->{check(" _ ");});
-    	btn_toBaseX.setOnAction(e->{check(" > ");});
+    	btn_hex.setOnAction(e->{});
+    	btn_dec.setOnAction(e->{});
+    	btn_bin.setOnAction(e->{});
+    	btn_oct.setOnAction(e->{});
     	btn_A.setOnAction(e->{check("A");});
     	btn_B.setOnAction(e->{check("B");});
     	btn_C.setOnAction(e->{check("C");});
