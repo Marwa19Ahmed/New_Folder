@@ -42,7 +42,7 @@ public class Simple
     	btn_openBra = new Button("(");
     	btn_closeBra = new Button(")");
     	btn_square = new Button("^");
-    	btn_sqrt = new Button("√");
+    	btn_sqrt = new Button("sqrt");
     	btn_delete = new Button("C");
     	btn_equal = new Button("=");
     	btn_1 = new Button("1");
@@ -271,7 +271,7 @@ public class Simple
 	   	btn_8.setOnAction(e->{check("8");});
 	   	btn_9.setOnAction(e->{check("9");});
 	   	btn_dot.setOnAction(e->{check(".");});
-	   	btn_ans.setOnAction(e->{lbl_answer.setText(" "+ans);});
+	   	btn_ans.setOnAction(e->{lbl_answer.setText(lbl_answer.getText()+ans);});
 	   	
 	   	
 	   	btn_add.setOnAction(e->{check(" + ");});

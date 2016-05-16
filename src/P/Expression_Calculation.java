@@ -7,7 +7,7 @@ public class Expression_Calculation {
 	public static boolean octal;
 	public static boolean hexa;
 	public static boolean decimal;
-
+	final static double precision=1000000000;
 	/** Evaluate an expression */
 	public static double evaluateExpression(String expression) {
 		// Create operandStack to store operands
@@ -160,30 +160,47 @@ public class Expression_Calculation {
 				if (operatorStack.peek() == '(')
 					operatorStack.pop(); // Pop the '(' symbol from the stack
 				else if (operatorStack.peek() == 'i') {
-					operandStack.push(Math.sin(operandStack.pop() * ((int) Math.PI / 180)));
+					if(Scientific.count%2!=0)
+						operandStack.push(Math.sin(operandStack.pop()));
+					else
+					operandStack.push(((double) Math.round(Math.sin(operandStack.pop()*(Math.PI/180))*precision)/precision));					operatorStack.pop(); // Pop the 'sin' symbol from the stack
 					operatorStack.pop(); // Pop the 'sin' symbol from the stack
 
 				} else if (operatorStack.peek() == 'c') {
-					operandStack.push(Math.cos(operandStack.pop() * (Math.PI / 180)));
+					if(Scientific.count%2!=0)
+						operandStack.push(Math.cos(operandStack.pop()));
+					else
+					operandStack.push(((double) Math.round(Math.cos(operandStack.pop()*(Math.PI/180))*precision)/precision));
 					operatorStack.pop(); // Pop the 'cos' symbol from the stack
-
+	
 				} else if (operatorStack.peek() == 'w') {
-					operandStack.push(Math.sinh(operandStack.pop() * (Math.PI / 180)));
-					operatorStack.pop(); // Pop the 'cos' symbol from the stack
-
+					if(Scientific.count%2!=0)
+						operandStack.push(Math.sinh(operandStack.pop()));
+					else
+					operandStack.push(((double) Math.round(Math.sinh(operandStack.pop()*(Math.PI/180))*precision)/precision));
+					operatorStack.pop(); // Pop the 'sinh' symbol from the stack
+	
 				} else if (operatorStack.peek() == 'k') {
-					operandStack.push(Math.cosh(operandStack.pop() * (Math.PI / 180)));
-					operatorStack.pop(); // Pop the 'cos' symbol from the stack
-
+					if(Scientific.count%2!=0)
+						operandStack.push(Math.cosh(operandStack.pop()));
+					else
+					operandStack.push(((double) Math.round(Math.cosh(operandStack.pop()*(Math.PI/180))*precision)/precision));
+					operatorStack.pop(); // Pop the 'cosh' symbol from the stack
+	
 				} else if (operatorStack.peek() == 'u') {
-					operandStack.push(Math.tanh(operandStack.pop() * (Math.PI / 180)));
-					operatorStack.pop(); // Pop the 'cos' symbol from the stack
-
+					if(Scientific.count%2!=0)
+						operandStack.push(Math.tanh(operandStack.pop()));
+					else
+					operandStack.push(((double) Math.round(Math.tanh(operandStack.pop()*(Math.PI/180))*precision)/precision));
+					operatorStack.pop(); // Pop the 'tanh' symbol from the stack
+	
 				} else if (operatorStack.peek() == 't') {
-					operandStack.push(Math.tan(operandStack.pop() * (Math.PI / 180)));// degree
+					if(Scientific.count%2!=0)
+						operandStack.push(Math.tan(operandStack.pop()));
+					else
+					operandStack.push(((double) Math.round(Math.tan(operandStack.pop()*(Math.PI/180))*precision)/precision));//degree
 					operatorStack.pop(); // Pop the 'tan' symbol from the stack
-
-				} else if (operatorStack.peek() == 'q') {
+					} else if (operatorStack.peek() == 'q') {
 					operandStack.push(Math.sqrt(operandStack.pop()));
 					operatorStack.pop(); // Pop the 'sqrt' symbol from the stack
 
