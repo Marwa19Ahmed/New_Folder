@@ -1,5 +1,8 @@
 package P;
 
+import java.awt.Desktop;
+import java.net.URI;
+
 import javafx.application.Application;
 import javafx.event.EventHandler;
 import javafx.scene.Scene;
@@ -19,7 +22,7 @@ public class Main extends Application
 	public static Programmer ssss = new Programmer(); 
 	public static GridPane con = new GridPane();
 	public static Button btn_Scientific,btn_Simple,
-		btn_Programmer,btn_Matrices,btn_Equation,null_;
+		btn_Programmer,btn_Matrices,btn_Graph,null_;
     
 	@Override
     public void start(Stage primaryStage)
@@ -44,7 +47,11 @@ public class Main extends Application
         btn_Scientific.setOnAction(e->{calculatorIntialization(2);});
 		btn_Matrices.setOnAction(e->{calculatorIntialization(3);});
 		btn_Programmer.setOnAction(e->{calculatorIntialization(4);});
-		btn_Equation.setOnAction(e->{});
+		btn_Graph.setOnAction(e->{ try {
+			Desktop.getDesktop().browse(new URI("http://www.mathway.com/graph"));
+		} catch (Exception e1) {
+			e1.printStackTrace();
+		}});
 		
 		// close on escape button (back button in android)
 		con.setOnKeyPressed(new EventHandler<KeyEvent>() {
@@ -63,7 +70,7 @@ public class Main extends Application
 		con.getChildren().clear();
 		//initialize component
 		btn_Simple = new Button("Simple");
-		btn_Equation = new Button("Equation");
+		btn_Graph = new Button("Graph");
 		btn_Scientific = new Button("Scientific");
 		btn_Matrices = new Button("Matrices");
 		btn_Programmer = new Button("Programmer");
@@ -78,7 +85,7 @@ public class Main extends Application
 		con.add(btn_Scientific, 1, 2);
 		con.add(btn_Matrices, 1, 3);
 		con.add(btn_Programmer, 1, 4);
-		con.add(btn_Equation, 1, 5);
+		con.add(btn_Graph, 1, 5);
 		
 		//resize component
 		null_.prefWidthProperty().bind(con.widthProperty().divide(200));
@@ -91,8 +98,8 @@ public class Main extends Application
 		btn_Matrices.prefHeightProperty().bind(con.heightProperty().divide(6));
 		btn_Programmer.prefWidthProperty().bind(con.widthProperty().subtract(50));
 		btn_Programmer.prefHeightProperty().bind(con.heightProperty().divide(6));
-		btn_Equation.prefWidthProperty().bind(con.widthProperty().subtract(50));
-		btn_Equation.prefHeightProperty().bind(con.heightProperty().divide(6));
+		btn_Graph.prefWidthProperty().bind(con.widthProperty().subtract(50));
+		btn_Graph.prefHeightProperty().bind(con.heightProperty().divide(6));
 		
 		//add style to component
 				con.setStyle("-fx-background-color: rgb(0, 0, 0);");
@@ -103,14 +110,14 @@ public class Main extends Application
 		btn_Simple.setStyle(style2_to_button);
 		btn_Matrices.setStyle(style2_to_button);
 		btn_Programmer.setStyle(style2_to_button);
-		btn_Equation.setStyle(style2_to_button);
+		btn_Graph.setStyle(style2_to_button);
 		
 		Paint color = (Paint) Color.WHITE;
      	btn_Scientific.setTextFill(color);
      	btn_Simple.setTextFill(color);
      	btn_Matrices.setTextFill(color);
      	btn_Programmer.setTextFill(color);  
-     	btn_Equation.setTextFill(color);
+     	btn_Graph.setTextFill(color);
 	}
  
     protected static void calculatorIntialization(int i)

@@ -18,7 +18,7 @@ import javafx.scene.shape.Line;
 
 public class Simple 
 {
-	protected double ans = 0 ;
+	protected String ans = "" ;
 	protected static int desgin = 0;
 	protected GridPane container = new GridPane();
 	protected Line line_top;
@@ -452,32 +452,9 @@ public class Simple
     protected void calculate(String exp)
     {
 		//calculate
-		double cal = 0;
 		exp = exp.replaceAll("PI", ""+Math.PI);
-		try
-		{	
-			
-	    	if(new Double(cal).isInfinite())
-	    		cal = Double.POSITIVE_INFINITY;
-	    	else
-	    	{
-	    		//to handle -
-	    			exp="0"+exp;
-	    		cal = Expression_Calculation.evaluateExpression(exp);
-	    	}
-		}
-		catch(Exception e)
-		{
-			check("Error");return ;
-		}
-    	if(new Double(cal).isInfinite())
-    		{check(" Infinity");}
-    	else
-    		{
-    		cal = Expression_Calculation.evaluateExpression(exp);
-    		ans = cal;
-    		lbl_answer.setText(" "+cal);
+    		ans = Expression_Calculation.evaluateExpression(exp);
+    		lbl_answer.setText(" "+ans);
     		check("Equal");
-    		}
     }
 }
