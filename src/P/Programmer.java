@@ -8,7 +8,8 @@ import javafx.scene.paint.Paint;
 public class Programmer extends Simple {
 	protected int ans = 0 ;
 	public boolean binary, octal, hexa, decimal;
-	protected Button btn_hex, btn_oct, btn_bin, btn_dec, btn_A, btn_B, btn_C, btn_D, btn_E, btn_F;
+	protected Button btn_hex, btn_oct, btn_bin, btn_dec,
+			btn_A, btn_B, btn_C, btn_D, btn_E, btn_F;
 
 	protected void initiateComponents() {
 		super.initiateComponents();

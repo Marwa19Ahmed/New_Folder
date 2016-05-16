@@ -11,8 +11,7 @@ import javafx.scene.paint.Paint;
 public class Scientific extends Simple 
 {
 	 static int count=2;
-	 protected Button btn_PI, btn_ln, btn_log,
-   		    btn_mod, btn_sin, btn_cos, btn_tan,
+	 protected Button btn_PI, btn_ln, btn_log, btn_sin, btn_cos, btn_tan,
    		    btn_sinh, btn_cosh, btn_tanh, btn_fact,degree_radian;
     
 	protected void initiateComponents()
@@ -21,7 +20,6 @@ public class Scientific extends Simple
     	desgin = 3;
     	btn_log = new Button("log");
     	btn_ln = new Button("ln");
-    	btn_mod = new Button("%");
     	btn_sin = new Button("Sin");
     	btn_cos = new Button("Cos");
     	btn_tan = new Button("Tan");
@@ -232,6 +230,7 @@ public class Scientific extends Simple
        	//check the lbl_answer if it is valid or not before writing 
         super.eventHandler();
     	btn_ln.setOnAction(e->{check(" ln( ");});
+    	btn_log.setOnAction(e->{check(" log( ");});
     	btn_sin.setOnAction(e->{check(" sin( ");});
     	btn_cos.setOnAction(e->{check(" cos( ");});
     	btn_tan.setOnAction(e->{check(" tan( ");});

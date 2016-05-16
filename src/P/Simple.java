@@ -322,15 +322,13 @@ public class Simple
 			}
     		
 		});
-    	container.setOnKeyPressed(new EventHandler<KeyEvent>() {
+    	Main.con.setOnKeyPressed(new EventHandler<KeyEvent>() {
 
 			@Override
 			public void handle(KeyEvent event) {
-				
-				if(event.getCode() == KeyCode.ESCAPE)	
-						System.exit(0);
+				if(event.getCode() == KeyCode.ESCAPE)
+					{Main.welcomePage();Main.calculatorDetection();}						
 			}
-    		
 		});
     	
     	
