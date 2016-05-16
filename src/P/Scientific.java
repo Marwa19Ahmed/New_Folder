@@ -10,7 +10,8 @@ import javafx.scene.paint.Paint;
 
 public class Scientific extends Simple 
 {
-	protected Button btn_PI, btn_ln, btn_log,
+	 static int count=2;
+	 protected Button btn_PI, btn_ln, btn_log,
    		    btn_mod, btn_sin, btn_cos, btn_tan,
    		    btn_sinh, btn_cosh, btn_tanh, btn_fact,degree_radian;
     
@@ -239,6 +240,7 @@ public class Scientific extends Simple
     	btn_tanh.setOnAction(e->{check(" tanh( ");});
     	btn_fact.setOnAction(e->{check(" !");});
     	btn_PI.setOnAction(e->{check(" PI ");});
+    	degree_radian.setOnAction(e->{++count; if(count%2!=0) degree_radian.setText("Rad"); else degree_radian.setText("Deg") ;});
     	
     	//if the size changed, the design will change
     	 container.widthProperty().addListener(new ChangeListener<Number>() {

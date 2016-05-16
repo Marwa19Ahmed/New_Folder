@@ -6,6 +6,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 
 public class Programmer extends Simple {
+	protected int ans = 0 ;
 	public boolean binary, octal, hexa, decimal;
 	protected Button btn_hex, btn_oct, btn_bin, btn_dec, btn_A, btn_B, btn_C, btn_D, btn_E, btn_F;
 
@@ -358,6 +359,11 @@ public class Programmer extends Simple {
 		btn_F.setOnAction(e -> {
 			check("F");
 		});
+		btn_ans.setOnAction(e->{
+			if(binary==true)lbl_answer.setText(lbl_answer.getText()+Integer.toBinaryString(ans));
+			else if(octal==true)lbl_answer.setText(lbl_answer.getText()+Integer.toOctalString(ans)); 
+			else if(binary==true)lbl_answer.setText(lbl_answer.getText()+Integer.toHexString(ans));
+			else lbl_answer.setText(lbl_answer.getText()+ans);});
 
 	}
 
@@ -396,6 +402,7 @@ public class Programmer extends Simple {
 		int cal = 0;
 		{
 			cal = (int) (Expression_Calculation.evaluateExpression(exp));
+			ans = cal;
 			if (binary == true)
 				lbl_answer.setText(" " + Integer.toBinaryString(cal));
 			else if (octal == true)
