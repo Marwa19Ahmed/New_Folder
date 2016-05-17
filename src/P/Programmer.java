@@ -11,7 +11,6 @@ public class Programmer extends Simple {
 	protected Button btn_hex, btn_oct, btn_bin, btn_dec,
 			btn_A, btn_B, btn_C, btn_D, btn_E, btn_F;
 
-	
 	protected void initiateComponents() {
 		super.initiateComponents();
 		desgin = 2;
@@ -25,7 +24,6 @@ public class Programmer extends Simple {
 		btn_D = new Button("D");
 		btn_E = new Button("E");
 		btn_F = new Button("F");
-		hexa = true;
 	}
 
 	protected void resizeComponents() {
@@ -215,20 +213,18 @@ public class Programmer extends Simple {
 			btn_D.setDisable(true);
 			btn_E.setDisable(true);
 			btn_F.setDisable(true);
-			if(!(lbl_answer.getText().endsWith(" * ") || lbl_answer.getText().endsWith(" / ") ||
-					lbl_answer.getText().endsWith(" + ") || lbl_answer.getText().endsWith(" - ")||
-					lbl_answer.getText().endsWith(" % ")))
-			{
-				int c = 0;
-				if (binary == true)	c = 2;
-			if (octal == true)	c = 8;
-			if (hexa == true)	c=16;
-			if (decimal == true)c=10;
-			int x = Expression_Calculation.fromXto10(lbl_answer.getText(), c);
-			lbl_answer.setText(Expression_Calculation.from10toX(x, 2));
+			if (octal == true) {
+				lbl_answer.setText(Integer.toBinaryString(Expression_Calculation.OctalToDecimal(lbl)));
+			}
+			if (hexa == true) {
+				lbl_answer.setText(Integer.toBinaryString((Expression_Calculation.HexaToDecimal(lbl))));
+			}
+			if (decimal == true) {
+				lbl_answer.setText(Integer.toBinaryString(((Integer.parseInt(lbl)))));
+			}
 			binary = true;
 			octal = hexa = decimal = false;
-			}
+			Expression_Calculation.setBase(2);
 		});
 
 		// activate octal
@@ -252,21 +248,24 @@ public class Programmer extends Simple {
 			btn_4.setDisable(false);
 			btn_3.setDisable(false);
 			btn_2.setDisable(false);
-			if(!(lbl_answer.getText().endsWith(" * ") || lbl_answer.getText().endsWith(" / ") ||
-					lbl_answer.getText().endsWith(" + ") || lbl_answer.getText().endsWith(" - ")||
-					lbl_answer.getText().endsWith(" % ")))
-			{
-				int c = 0;
-			if (binary == true)	c = 2;
-			if (octal == true)	c = 8;
-			if (hexa == true)	c=16;
-			if (decimal == true)c=10;
-			int x = Expression_Calculation.fromXto10(lbl_answer.getText(), c);
-			lbl_answer.setText(Expression_Calculation.from10toX(x, 8));
+			
+			if (binary == true) {
+				lbl_answer.setText(
+						" " + Integer.toOctalString((Expression_Calculation.BinaryToDecimal(lbl))));
+			}
+			if (hexa == true) {
+				lbl_answer.setText(
+						" " + Integer.toOctalString((Expression_Calculation.HexaToDecimal(lbl))));
+			}
+			if (decimal == true) {
+				lbl_answer.setText(" " + Integer.toOctalString((Integer.parseInt(lbl))));
+			}
 			octal = true;
-			binary = decimal = hexa = false;}
+			binary = decimal = hexa = false;
+			Expression_Calculation.setBase(8);
+
 		});
-		btn_equal.setOnAction(e->{calculate();});
+
 		// activate hexa
 		btn_hex.setOnAction(e -> {
 			btn_A.setDisable(false);
@@ -283,19 +282,27 @@ public class Programmer extends Simple {
 			btn_2.setDisable(false);
 			btn_9.setDisable(false);
 			btn_8.setDisable(false);
-			if(!(lbl_answer.getText().endsWith(" * ") || lbl_answer.getText().endsWith(" / ") ||
-					lbl_answer.getText().endsWith(" + ") || lbl_answer.getText().endsWith(" - ")||
-					lbl_answer.getText().endsWith(" % ")))
-			{
-				int c = 0;
-				if (binary == true)	c = 2;
-			if (octal == true)	c = 8;
-			if (hexa == true)	c=16;
-			if (decimal == true)c=10;
-			int x = Expression_Calculation.fromXto10(lbl_answer.getText(), c);
-			lbl_answer.setText(Expression_Calculation.from10toX(x, 16));
+			
+			String lbl = "";
+			if (lbl_answer.getText().startsWith(" ")) {
+				lbl = (lbl_answer.getText().substring(1, lbl_answer.getText().length()));
+			} else
+				lbl = lbl_answer.getText();
+			if (binary == true) {
+				lbl_answer.setText(
+						" " + Integer.toHexString((Expression_Calculation.BinaryToDecimal((lbl)))));
+			}
+			if (octal == true) {
+				lbl_answer.setText(
+						" " + Integer.toHexString((Expression_Calculation.OctalToDecimal(lbl))));
+			}
+			if (decimal == true) {
+				lbl_answer.setText(" " + Integer.toHexString((Integer.parseInt(lbl))));
+			}
 			octal = binary = decimal = false;
-			hexa = true;}
+			hexa = true;
+			Expression_Calculation.setBase(16);
+
 		});
 
 		// activate decimal
@@ -319,19 +326,21 @@ public class Programmer extends Simple {
 			btn_D.setDisable(true);
 			btn_E.setDisable(true);
 			btn_F.setDisable(true);
-			if(!(lbl_answer.getText().endsWith(" * ") || lbl_answer.getText().endsWith(" / ") ||
-					lbl_answer.getText().endsWith(" + ") || lbl_answer.getText().endsWith(" - ")||
-					lbl_answer.getText().endsWith(" % ")))
-			{
-				int c = 0;
-				if (binary == true)	c = 2;
-			if (octal == true)	c = 8;
-			if (hexa == true)	c=16;
-			if (decimal == true)c=10;
-			int x = Expression_Calculation.fromXto10(lbl_answer.getText(), c);
-			lbl_answer.setText(Expression_Calculation.from10toX(x, 10));
+			if (binary == true) {
+				lbl_answer.setText(
+						" " +(Expression_Calculation.BinaryToDecimal((lbl))));
+			}
+			if (octal == true) {
+				lbl_answer.setText(
+						" " +((Expression_Calculation.OctalToDecimal(lbl))));
+			}
+			if (hexa== true) {
+				lbl_answer.setText(" " + ((Expression_Calculation.HexaToDecimal(lbl))));
+			}
 			hexa =octal = binary = false;
-			 decimal = true;}
+			 decimal = true;
+			Expression_Calculation.setBase(10);
+
 		});
 		btn_A.setOnAction(e -> {
 			check("A");
@@ -389,27 +398,20 @@ public class Programmer extends Simple {
 		lbl_answer.setText(exp);
 	}
 
-	protected void calculate() {
+	protected void calculate(String exp) {
 		// calculate
-		String cal = "";
+		int cal = 0;
 		{
-			if(decimal == true)
-				lbl_answer.setText(" " + Expression_Calculation.evaluateExpression(lbl_answer.getText()));
+			cal = (int) (Expression_Calculation.evaluateExpression(exp));
+			ans = cal;
 			if (binary == true)
-			{
-				String x = Expression_Calculation.sxs(lbl_answer.getText(), 2);
-				lbl_answer.setText(Expression_Calculation.evaluateExpression(x));
-			}
+				lbl_answer.setText(" " + Integer.toBinaryString(cal));
 			else if (octal == true)
-			{
-				String x = Expression_Calculation.sxs(lbl_answer.getText(), 8);
-				lbl_answer.setText(Expression_Calculation.evaluateExpression(x));
-			}
+				lbl_answer.setText(" " + Integer.toOctalString(cal));
 			else if (hexa == true)
-			{
-				String x = Expression_Calculation.sxs(lbl_answer.getText(), 16);
-				lbl_answer.setText(Expression_Calculation.evaluateExpression(x));
-			}
+				lbl_answer.setText(" " + Integer.toHexString(cal));
+			else
+				lbl_answer.setText(" " +cal);
 			check("Equal");
 		}
 	}

@@ -453,7 +453,7 @@ public class Simple
     {
 		//calculate
 		exp = exp.replaceAll("PI", ""+Math.PI);
-    		ans = Expression_Calculation.evaluateExpression(exp);
+    		ans = ""+Expression_Calculation.evaluateExpression(exp);
     		lbl_answer.setText(" "+ans);
     		check("Equal");
     }

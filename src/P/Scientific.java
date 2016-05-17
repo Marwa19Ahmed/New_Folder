@@ -303,6 +303,28 @@ public class Scientific extends Simple
     protected void calculate(String exp)
     {
 		//calculate
+		double cal = 0;
 		exp = exp.replaceAll("PI", ""+Math.PI);
-	    	lbl_answer.setText(" "+Expression_Calculation.evaluateExpression(exp));check("Equal");}
+		try
+		{	
+			
+	    	if(new Double(cal).isInfinite())
+	    		cal = Double.POSITIVE_INFINITY;
+	    	else
+	    	{
+	    		//to handle -
+	    			exp="0"+exp;
+	    		cal = Expression_Calculation.evaluateExpression(exp);
+	    	}
+		}
+		catch(Exception e)
+		{
+			check("Error");return ;
+		}
+    	if(new Double(cal).isInfinite())
+    		{check(" Infinity");}
+    	else
+    		{cal = Expression_Calculation.evaluateExpression(exp);ans = ""+cal; lbl_answer.setText(" "+cal);check("Equal");}
     }
+
+}
